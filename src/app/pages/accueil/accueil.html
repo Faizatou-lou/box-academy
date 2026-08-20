@@ -1,0 +1,277 @@
+<!-- ============ HERO CAROUSEL ============ -->
+<section class="hero">
+  <div class="hero-track" [style.transform]="'translateX(' + (-heroIndex * 100) + '%)'">
+    @for (slide of heroSlides; track slide.titre; let i = $index) {
+      <div class="hero-slide">
+        @if (i === heroIndex) {
+          <div class="hero-content">
+            <span class="eyebrow anim-eyebrow">Box Academy</span>
+            <h1 class="hero-title anim-title">{{ slide.titre }}</h1>
+            <p class="hero-subtitle anim-subtitle">{{ slide.sousTitre }}</p>
+            <div class="hero-buttons anim-buttons">
+              <a routerLink="/formations" class="btn-primary">S'inscrire gratuitement</a>
+              <a routerLink="/contact" class="btn-outline">Nous contacter</a>
+            </div>
+          </div>
+        } @else {
+          <div class="hero-content"></div>
+        }
+        <div class="hero-visual">
+          <div class="box-b1"></div>
+          <div class="box-b2"></div>
+          <div class="box-photo" [style.backgroundImage]="'url(' + slide.image + ')'"></div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="hero-nav">
+    <div class="hero-arrow" (click)="heroPrev()"><i class="ti ti-chevron-left"></i></div>
+    <div class="hero-dots">
+      @for (slide of heroSlides; track slide.titre; let i = $index) {
+        <div class="hero-dot" [class.active]="heroIndex === i" (click)="heroGoTo(i)"></div>
+      }
+    </div>
+    <div class="hero-arrow" (click)="heroNext()"><i class="ti ti-chevron-right"></i></div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section class="stats" id="stats-section">
+  <div class="stat-card">
+    <span class="stat-number">+{{ statFormations }}</span>
+    <span class="stat-label">Formations disponibles</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">+{{ statApprenants }}</span>
+    <span class="stat-label">Apprenants formés</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">+{{ statExperience }}</span>
+    <span class="stat-label">Années d'expérience</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">{{ statSatisfaction }}%</span>
+    <span class="stat-label">Taux de satisfaction</span>
+  </div>
+</section>
+
+<!-- ============ PROCHAINEMENT ============ -->
+@if (formationsAVenir.length > 0) {
+  <section class="annonces-section" (mouseenter)="pauseDefilement()" (mouseleave)="reprendreDefilement()">
+    <div class="annonces-header">
+      <div class="annonce-badge">Prochainement</div>
+      @if (formationsAVenir.length > 1) {
+        <div class="annonces-nav">
+          <div class="nav-arrow" (click)="annoncePrecedente()"><i class="ti ti-chevron-left"></i></div>
+          <div class="nav-arrow" (click)="annonceSuivante()"><i class="ti ti-chevron-right"></i></div>
+        </div>
+      }
+    </div>
+    <div class="annonce-viewport">
+      <div class="annonce-track" [style.transform]="'translateX(' + (-carouselIndex * 356) + 'px)'">
+        @for (formation of formationsAVenir; track formation.id) {
+          <div class="annonce-card">
+            @if (formation.icone && !erreursLogo.has(formation.id)) {
+              <img [src]="'assets/logos/' + formation.icone" class="annonce-icon-img" [alt]="formation.titre" (error)="onLogoError(formation.id)" />
+            } @else {
+              <div class="annonce-icon">{{ getInitiales(formation.titre) }}</div>
+            }
+            <h3 class="annonce-titre">{{ formation.titre }}</h3>
+            <p class="annonce-desc">{{ formation.descriptif }}</p>
+            @if (joursAvantDebut(formation.dateDebut); as jours) {
+              <span class="annonce-date"><i class="ti ti-calendar"></i> Début dans {{ jours }} jour{{ jours > 1 ? 's' : '' }}</span>
+            } @else {
+              <span class="annonce-date"><i class="ti ti-calendar"></i> Début : {{ formation.dateDebut }}</span>
+            }
+            <a [routerLink]="['/formation-detail', formation.id]" class="annonce-btn">En savoir plus →</a>
+          </div>
+        }
+      </div>
+    </div>
+    @if (formationsAVenir.length > 1) {
+      <div class="annonces-dots">
+        @for (formation of formationsAVenir; track formation.id; let i = $index) {
+          <div class="nav-dot" [class.active]="carouselIndex === i" (click)="allerVersAnnonce(i)"></div>
+        }
+      </div>
+    }
+  </section>
+}
+
+<!-- ============ FORMATIONS EN VOGUE ============ -->
+<section class="formations-section">
+  <div class="section-head">
+    <div>
+      <span class="section-eyebrow">Catalogue</span>
+      <h2 class="section-title">Formations en vogue</h2>
+      <p class="section-sub">Un aperçu des parcours les plus suivis, classés par tendance et par domaine.</p>
+    </div>
+    <a routerLink="/formations" class="see-all-link">Voir tout le catalogue →</a>
+  </div>
+
+  <div class="formations-layout">
+    <div class="formations-highlight">
+      <div>
+        <div class="big-num">+{{ statFormations }}</div>
+        <p>formations actives réparties sur plusieurs domaines, encadrées par des formateurs certifiés.</p>
+      </div>
+      <a routerLink="/formations">Voir tous les domaines →</a>
+    </div>
+
+    <div class="cols">
+      @for (colonne of formationsColonnes; track colonne.titre) {
+        <div class="col">
+          <h3>{{ colonne.titre }} <span class="arrow">→</span></h3>
+          @for (formation of colonne.items; track formation.id) {
+            <a [routerLink]="['/formation-detail', formation.id]" class="fmc">
+              @if (formation.icone && !erreursLogo.has(formation.id)) {
+                <img [src]="'assets/logos/' + formation.icone" class="fmc-icon-img" [alt]="formation.titre" (error)="onLogoError(formation.id)" />
+              } @else {
+                <div class="fmc-icon">{{ getInitiales(formation.titre) }}</div>
+              }
+              <div class="fmc-body">
+                <div class="fmc-top">
+                  <h4 class="fmc-title">{{ formation.titre }}</h4>
+                </div>
+                <p class="fmc-desc">{{ formation.descriptif }}</p>
+                <div class="fmc-meta">
+                  <span class="fmc-badge" [class.certifiante]="formation.certifiante">
+                    <i class="ti" [class.ti-check]="formation.certifiante" [class.ti-minus]="!formation.certifiante"></i>
+                    {{ formation.certifiante ? 'Certifiante' : 'Non certifiante' }}
+                  </span>
+                  <span class="fmc-rating"><i class="ti ti-star-filled"></i> {{ formation.note || '4.7' }}</span>
+                </div>
+              </div>
+              <i class="ti ti-chevron-right fmc-arrow"></i>
+            </a>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ============ PARTENAIRES ============ -->
+<section class="partenaires-section">
+  <span class="section-eyebrow">Réseau</span>
+  <h2 class="section-title">Ils nous font confiance</h2>
+  <p class="section-sub">{{ partenairesTous.length }} partenaires accompagnent nos apprenants vers l'emploi</p>
+
+  <div class="partners-banners">
+    <div class="banner b-blue">
+      <h3>Box Academy Pro</h3>
+      <p>Certifications reconnues par nos partenaires entreprises</p>
+      <a routerLink="/formations">Découvrir →</a>
+    </div>
+    <div class="banner b-black">
+      <h3>Formations en entreprise</h3>
+      <p>Des programmes sur mesure pour vos équipes</p>
+      <a routerLink="/contact">Nous contacter →</a>
+    </div>
+  </div>
+
+  <div class="logos-marquee">
+    <div class="marquee-row">
+      <div class="marquee-track">
+        @for (p of partenairesLigne1; track $index) {
+          <div class="logo-chip">
+            <img [src]="'assets/partenaires/' + p.fichier" [alt]="p.nom" />
+          </div>
+        }
+        @for (p of partenairesLigne1; track $index) {
+          <div class="logo-chip" aria-hidden="true">
+            <img [src]="'assets/partenaires/' + p.fichier" alt="" />
+          </div>
+        }
+      </div>
+    </div>
+    <div class="marquee-row">
+      <div class="marquee-track reverse">
+        @for (p of partenairesLigne2; track $index) {
+          <div class="logo-chip">
+            <img [src]="'assets/partenaires/' + p.fichier" [alt]="p.nom" />
+          </div>
+        }
+        @for (p of partenairesLigne2; track $index) {
+          <div class="logo-chip" aria-hidden="true">
+            <img [src]="'assets/partenaires/' + p.fichier" alt="" />
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="partenaires-stats">
+    <div class="p-stat">
+      <span class="p-stat-value">{{ partenairesTous.length }}</span>
+      <span class="p-stat-label">Partenaires actifs</span>
+    </div>
+    <div class="p-stat">
+      <span class="p-stat-value">8</span>
+      <span class="p-stat-label">Secteurs représentés</span>
+    </div>
+    <div class="p-stat">
+      <span class="p-stat-value">100%</span>
+      <span class="p-stat-label">Certifications reconnues</span>
+    </div>
+  </div>
+</section>
+<!-- ============ CATEGORIES ============ -->
+<section class="categories-section">
+  <span class="section-eyebrow">Domaines</span>
+  <h2 class="section-title">Explorer nos catégories</h2>
+  <p class="section-sub">Chaque catégorie mène vers la liste filtrée des formations correspondantes.</p>
+
+  <div class="cat-grid">
+    @for (cat of categories; track cat.id) {
+      <a [routerLink]="['/formations']" [queryParams]="{ categorie: cat.slug }" class="cat-card">
+        <div class="cat-icon" [style.color]="cat.couleur" [style.backgroundColor]="cat.couleur + '1A'">
+          <app-category-icon [name]="cat.icone"></app-category-icon>
+        </div>
+        <div>
+          <div class="cat-name">{{ cat.nom }}</div>
+          <div class="cat-count">{{ nombreFormationsCategorie(cat.id) }} formation{{ nombreFormationsCategorie(cat.id) > 1 ? 's' : '' }}</div>
+        </div>
+        <div class="cat-arrow">Explorer <i class="ti ti-arrow-right"></i></div>
+      </a>
+    }
+    @if (categories.length === 0) {
+      <p class="section-sub">Aucune catégorie renseignée pour le moment.</p>
+    }
+  </div>
+</section>
+
+<!-- ============ POURQUOI NOUS ============ -->
+<section class="why-us">
+  <h2 class="section-title">Pourquoi nous choisir ?</h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon"><i class="ti ti-target-arrow"></i></div>
+      <h3>Formations ciblées</h3>
+      <p>Des programmes adaptés aux besoins réels du marché professionnel.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon"><i class="ti ti-award"></i></div>
+      <h3>Certifications reconnues</h3>
+      <p>Obtenez des certifications valorisées par les employeurs.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon"><i class="ti ti-bulb"></i></div>
+      <h3>Pédagogie innovante</h3>
+      <p>Des méthodes modernes et interactives pour apprendre efficacement.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon"><i class="ti ti-heart-handshake"></i></div>
+      <h3>Accompagnement personnalisé</h3>
+      <p>Un suivi individuel pour garantir votre réussite.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA FINAL ============ -->
+<section class="cta">
+  <h2>Prêt à booster votre carrière ?</h2>
+  <p>Inscrivez-vous dès aujourd'hui et rejoignez nos apprenants.</p>
+  <a routerLink="/formations" class="btn-white">Commencer maintenant</a>
+</section>

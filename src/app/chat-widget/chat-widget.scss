@@ -1,0 +1,304 @@
+$bleu: #29ABE2;
+$bleuClair: #3EC1F5;
+$bleuFonce: #1c7fab;
+$noir: #111111;
+
+
+
+.conteneur-bouton {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 64px;
+  height: 64px;
+  z-index: 1000;
+}
+
+.onde {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: $bleu;
+  opacity: 0.55;
+  animation: onde 1.8s ease-out infinite;
+  pointer-events: none;
+}
+.onde-2 { animation-delay: 0.6s; }
+.onde-3 { animation-delay: 1.2s; }
+
+.bouton-flottant {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, $bleuClair, $bleuFonce);
+  box-shadow: 0 10px 28px rgba($bleu, 0.55), 0 3px 8px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  animation: rebond 2.6s ease-in-out infinite;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 14px 34px rgba($bleu, 0.7), 0 4px 10px rgba(0,0,0,0.25);
+  }
+
+  &.actif {
+    background: linear-gradient(135deg, $noir, #333);
+    animation: none;
+  }
+}
+
+.badge-nouveaute {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #F0453C;
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: white;
+  font-weight: 600;
+  z-index: 3;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(3px);
+  z-index: 998;
+  animation: fadeIn 0.2s ease;
+}
+
+.panneau-chat {
+  position: fixed;
+  bottom: 104px;
+  right: 28px;
+  width: 360px;
+  max-width: calc(100vw - 40px);
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  background: #F5F7FA;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  z-index: 999;
+  animation: slideUp 0.3s ease;
+
+  .panneau-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, $bleuClair, $bleuFonce);
+    color: white;
+
+    .avatar-header {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .infos-header {
+      flex: 1;
+      h3 { margin: 0; font-size: 14.5px; font-weight: 600; }
+      p {
+        margin: 0;
+        font-size: 12.5px;
+        opacity: 0.9;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        .pastille {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #4ade80;
+        }
+      }
+    }
+
+    .btn-fermer {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.85;
+      &:hover { opacity: 1; }
+    }
+  }
+
+  .zone-messages {
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .ligne-message {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+
+    &.user { justify-content: flex-end; }
+
+    .avatar-mini {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: $bleu;
+      flex-shrink: 0;
+    }
+    .lien-chat {
+  color: $bleu;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+    .bulle {
+      max-width: 78%;
+      padding: 10px 14px;
+      font-size: 14.5px;
+      line-height: 1.55;
+      animation: fadeIn 0.25s ease;
+      white-space: pre-wrap;
+    }
+
+    .bulle-bot {
+      background: white;
+      color: #222;
+      border-radius: 14px 14px 14px 3px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    }
+
+    .bulle-user {
+      background: $bleu;
+      color: white;
+      border-radius: 14px 14px 3px 14px;
+    }
+  }
+
+  .indicateur-frappe {
+    display: flex;
+    gap: 4px;
+    padding: 12px 14px;
+
+    span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #999;
+      animation: clignote 1.4s infinite;
+
+      &:nth-child(2) { animation-delay: 0.2s; }
+      &:nth-child(3) { animation-delay: 0.4s; }
+    }
+  }
+
+  .zone-saisie {
+    padding: 10px 12px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    background: white;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 9px 14px;
+      font-size: 14px;
+      outline: none;
+
+      &:focus {
+        border-color: $bleu;
+      }
+
+      &:disabled {
+        background: #f5f5f5;
+      }
+    }
+
+    .btn-envoyer {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, $bleuClair, $bleuFonce);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: opacity 0.15s ease;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+@keyframes onde {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(2.1); opacity: 0; }
+}
+
+@keyframes rebond {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes clignote {
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-3px); }
+}
+
+@media (max-width: 480px) {
+  .panneau-chat {
+    right: 16px;
+    left: 16px;
+    width: auto;
+    bottom: 96px;
+  }
+  .conteneur-bouton {
+    bottom: 20px;
+    right: 20px;
+  }
+}

@@ -1,0 +1,307 @@
+<section class="formations-page">
+
+  <!-- HERO -->
+  <section class="formations-hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <span class="hero-eyebrow">CATALOGUE BOX ACADEMY</span>
+        <h1>Nos formations <span>professionnelles</span></h1>
+        <p>
+          Développez vos compétences avec nos formations professionnelles et certifiantes,
+          conçues pour répondre aux exigences du monde professionnel.
+        </p>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <strong>{{ formations.length }}</strong>
+            <span>Formations</span>
+          </div>
+          <div class="hero-stat">
+            <strong>{{ categories.length }}</strong>
+            <span>Domaines</span>
+          </div>
+          <div class="hero-stat">
+            <strong>{{ nombreCertifiantes }}%</strong>
+            <span>Certifiantes</span>
+          </div>
+          <div class="hero-stat">
+            <strong>Expert</strong>
+            <span>Formateurs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-orbit orbit-one"></div>
+        <div class="hero-orbit orbit-two"></div>
+        <div class="hero-book">
+          <div class="book-icon"><app-category-icon name="graduation-cap"></app-category-icon></div>
+          <div class="book book-1"></div>
+          <div class="book book-2"></div>
+          <div class="book book-3"></div>
+        </div>
+        <span class="floating-icon icon-1"><app-category-icon name="cloud"></app-category-icon></span>
+        <span class="floating-icon icon-2"><app-category-icon name="shield-check"></app-category-icon></span>
+        <span class="floating-icon icon-3"><app-category-icon name="bar-chart-3"></app-category-icon></span>
+        <span class="floating-icon icon-4"><app-category-icon name="brain-circuit"></app-category-icon></span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- BARRE CATÉGORIES -->
+  <nav class="categories-nav">
+
+    <button
+      class="category-tab all"
+      [class.active]="activeCategory === 'toutes'"
+      (click)="selectionnerCategorie('toutes')">
+      <app-category-icon name="graduation-cap" class="category-icon"></app-category-icon>
+      <span>Toutes les formations</span>
+      <small>{{ formationsFiltrees.length }}</small>
+    </button>
+
+    @for (category of categories; track category.id) {
+      <button
+        class="category-tab"
+        [class.active]="activeCategory === category.id"
+        [style.--category-color]="category.couleur"
+        (click)="selectionnerCategorie(category.id)">
+        <app-category-icon [name]="category.icone" class="category-icon"></app-category-icon>
+        <span>{{ category.nom }}</span>
+        <small>{{ getFormationsCategorie(category.id).length }}</small>
+      </button>
+    }
+
+    <button
+      class="category-tab"
+      [class.active]="activeCategory === 'non-classees'"
+      (click)="selectionnerCategorie('non-classees')">
+      <app-category-icon name="folder" class="category-icon"></app-category-icon>
+      <span>Non classées</span>
+      <small>{{ getFormationsNonClassees().length }}</small>
+    </button>
+
+  </nav>
+
+
+  <!-- CONTENU -->
+  <main class="formations-main">
+
+    <!-- FILTRES -->
+    <section class="filters-bar">
+      <div class="search-box">
+        <span>⌕</span>
+        <input
+          type="text"
+          placeholder="Rechercher une formation..."
+          [value]="recherche"
+          (input)="rechercher($event)"
+        />
+      </div>
+
+      <div class="type-filter">
+        <label>Type</label>
+        <select [value]="filtreType" (change)="filtrerType($event)">
+          <option value="tous">Toutes</option>
+          <option value="certifiante">Certifiantes</option>
+          <option value="non-certifiante">Non certifiantes</option>
+        </select>
+      </div>
+    </section>
+
+
+    <!-- RÉSULTAT VIDE -->
+    @if (formationsFiltrees.length === 0) {
+      <div class="no-result">
+        <div class="no-result-icon">🔎</div>
+        <h3>Aucune formation trouvée</h3>
+        <p>Essayez de modifier votre recherche ou vos filtres.</p>
+      </div>
+    }
+
+
+    <!-- VUE "TOUTES" -->
+    @if (activeCategory === 'toutes') {
+
+      @for (category of categories; track category.id) {
+        @if (getFormationsCategorie(category.id).length > 0) {
+
+          <section class="category-section" [id]="category.slug" [style.--category-color]="category.couleur">
+
+            <div class="category-header">
+              <div class="category-title-wrapper">
+                <div class="category-big-icon">
+                  <app-category-icon [name]="category.icone"></app-category-icon>
+                </div>
+                <div>
+                  <div class="category-title-line">
+                    <h2>{{ category.nom }}</h2>
+                    <span class="category-count">{{ getFormationsCategorie(category.id).length }}</span>
+                  </div>
+                  <p>{{ category.description }}</p>
+                </div>
+              </div>
+
+              <button class="see-all-btn" (click)="selectionnerCategorie(category.id)">
+                Voir toutes <span>→</span>
+              </button>
+            </div>
+
+            <div class="formations-grid">
+              @for (formation of getFormationsCategorie(category.id); track formation.id) {
+                <ng-container *ngTemplateOutlet="carteFormation; context: { formation: formation }"></ng-container>
+              }
+            </div>
+
+          </section>
+
+        }
+      }
+
+      @if (getFormationsNonClassees().length > 0) {
+        <section class="category-section" [style.--category-color]="'#94a3b8'">
+          <div class="category-header">
+            <div class="category-title-wrapper">
+              <div class="category-big-icon">
+                <app-category-icon name="folder"></app-category-icon>
+              </div>
+              <div>
+                <div class="category-title-line">
+                  <h2>Non classées</h2>
+                  <span class="category-count">{{ getFormationsNonClassees().length }}</span>
+                </div>
+                <p>Formations en attente d'affectation à une catégorie.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="formations-grid">
+            @for (formation of getFormationsNonClassees(); track formation.id) {
+              <ng-container *ngTemplateOutlet="carteFormation; context: { formation: formation }"></ng-container>
+            }
+          </div>
+        </section>
+      }
+
+    } @else if (activeCategory === 'non-classees') {
+
+      <!-- VUE "NON CLASSÉES" SEULES -->
+      <section class="category-section category-focus" [style.--category-color]="'#94a3b8'">
+        <div class="category-header">
+          <div class="category-title-wrapper">
+            <div class="category-big-icon">
+              <app-category-icon name="folder"></app-category-icon>
+            </div>
+            <div>
+              <div class="category-title-line">
+                <h2>Non classées</h2>
+                <span class="category-count">{{ getFormationsNonClassees().length }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="formations-grid">
+          @for (formation of getFormationsNonClassees(); track formation.id) {
+            <ng-container *ngTemplateOutlet="carteFormation; context: { formation: formation }"></ng-container>
+          }
+        </div>
+      </section>
+
+    } @else {
+
+      <!-- VUE UNE SEULE CATÉGORIE -->
+      @for (category of categories; track category.id) {
+        @if (category.id === activeCategory) {
+
+          <section class="category-section category-focus" [style.--category-color]="category.couleur">
+            <div class="category-header">
+              <div class="category-title-wrapper">
+                <div class="category-big-icon">
+                  <app-category-icon [name]="category.icone"></app-category-icon>
+                </div>
+                <div>
+                  <div class="category-title-line">
+                    <h2>{{ category.nom }}</h2>
+                    <span class="category-count">{{ getFormationsCategorie(category.id).length }}</span>
+                  </div>
+                  <p>{{ category.description }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="formations-grid">
+              @for (formation of getFormationsCategorie(category.id); track formation.id) {
+                <ng-container *ngTemplateOutlet="carteFormation; context: { formation: formation }"></ng-container>
+              }
+            </div>
+          </section>
+
+        }
+      }
+
+    }
+
+  </main>
+
+
+  <!-- CTA FINAL -->
+  <section class="formations-cta">
+    <div class="cta-icon"><app-category-icon name="graduation-cap"></app-category-icon></div>
+    <div>
+      <h2>Prêt à développer vos compétences ?</h2>
+      <p>Inscrivez-vous dès maintenant et boostez votre carrière avec Box Academy.</p>
+    </div>
+    <a routerLink="/inscription" class="cta-btn">
+      S'inscrire maintenant <span>→</span>
+    </a>
+  </section>
+
+</section>
+
+
+<!-- TEMPLATE RÉUTILISABLE POUR UNE CARTE -->
+<ng-template #carteFormation let-formation="formation">
+  <article class="formation-card" data-reveal>
+
+    <div class="card-top">
+      @if (formation.icone && !erreursLogo.has(formation.id)) {
+        <img
+          [src]="'assets/logos/' + formation.icone"
+          class="card-logo"
+          [alt]="formation.titre"
+          (error)="onLogoError(formation.id)"
+        />
+      } @else {
+        <div class="card-logo card-logo-initiales">
+          {{ getInitiales(formation.titre) }}
+        </div>
+      }
+
+      <span class="card-badge" [class.certifiante]="formation.certifiante">
+        {{ formation.certifiante ? 'Certifiante' : 'Non certifiante' }}
+      </span>
+    </div>
+
+    @if (formation.certifiante) {
+      <span class="card-type">✓ Certification officielle</span>
+    }
+
+    <h3 class="card-title">{{ formation.titre }}</h3>
+    <p class="card-desc">{{ formation.descriptif }}</p>
+
+    @if (formation.axes?.length) {
+      <div class="card-axes">
+        @for (axe of formation.axes; track axe) {
+          <span class="axe-tag">{{ axe }}</span>
+        }
+      </div>
+    }
+
+    <a [routerLink]="['/formation-detail', formation.id]" class="card-btn">
+      Voir la formation <span>→</span>
+    </a>
+
+  </article>
+</ng-template>

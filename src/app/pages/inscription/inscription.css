@@ -1,0 +1,359 @@
+:root {
+  --primary-blue: #29ABE2;
+  --primary-blue-dark: #1E8FC0;
+  --primary-blue-light: #EAF6FD;
+  --text-dark: #1F2937;
+  --text-muted: #6B7280;
+  --border-color: #E5E7EB;
+  --success-green: #22C55E;
+  --error-red: #EF4444;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ---------- Hero (si conservé au-dessus du formulaire) ---------- */
+.inscription-hero {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+
+.inscription-hero h1 {
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.inscription-hero p {
+  color: var(--text-muted);
+}
+
+/* ---------- Container général ---------- */
+.inscription-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+/* ---------- Barre de progression ---------- */
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background: var(--border-color);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-blue), var(--primary-blue-dark));
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.progress-steps {
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* ---------- Carte de conversation ---------- */
+.chat-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  padding: 32px;
+  border: 1px solid var(--border-color);
+  transform: translateZ(0);
+}
+
+/* ---------- Bulle du bot ---------- */
+.bot-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.bot-avatar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.3rem;
+}
+
+.bot-bubble {
+  background: var(--primary-blue-light);
+  border-radius: 4px 16px 16px 16px;
+  padding: 14px 18px;
+  max-width: 85%;
+}
+
+.bot-bubble p {
+  margin: 0;
+  color: var(--text-dark);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* ---------- Etape 1 : cartes de formation ---------- */
+.loading-text {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 20px 0;
+}
+
+.formation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.formation-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  background: #fff;
+  border: 2px solid var(--category-color, var(--border-color));
+  border-radius: 14px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.formation-card:hover {
+  box-shadow: 0 6px 16px rgba(41, 171, 226, 0.15);
+  transform: translateY(-3px);
+}
+
+.formation-card.selected {
+  border-color: var(--category-color, var(--primary-blue));
+  background: color-mix(in srgb, var(--category-color, var(--primary-blue)) 10%, white);
+}
+
+.formation-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--primary-blue-light);
+  color: var(--primary-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+
+.formation-card.selected .formation-icon {
+  background: var(--category-color, var(--primary-blue));
+  color: #fff;
+}
+
+.formation-card h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  color: var(--text-dark);
+}
+
+.mini-badge {
+  align-self: flex-start;
+  margin-top: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #059669;
+  background: #ECFDF5;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* ---------- Champs de saisie ---------- */
+.step-content {
+  animation: fadeIn 0.3s ease;
+}
+
+.user-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin-bottom: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.user-input-row:focus-within {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(41, 171, 226, 0.12);
+}
+
+.textarea-row {
+  align-items: flex-start;
+}
+
+.input-icon {
+  color: var(--primary-blue);
+  font-size: 1.1rem;
+  margin-top: 2px;
+}
+
+.chat-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: var(--text-dark);
+  font-family: inherit;
+  background: transparent;
+  resize: none;
+}
+
+.chat-input::placeholder {
+  color: #A1A1AA;
+}
+
+/* ---------- Récap formation présélectionnée ---------- */
+.formation-recap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--primary-blue-light);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--primary-blue);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.link-button:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Message d'erreur ---------- */
+.error-message {
+  color: var(--error-red);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* ---------- Boutons de navigation ---------- */
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  position: relative;
+  z-index: 100;
+  width: 100%;
+}
+
+.btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  min-height: 46px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  position: relative;
+  z-index: 101;
+}
+.btn-primary {
+  background: #29ABE2 !important;
+  color: #fff !important;
+  margin-left: auto;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-blue-dark);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  background: #B9E1F4 !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background: #F9FAFB;
+  color: var(--text-dark);
+}
+
+/* ---------- Ecran de succès ---------- */
+.success-message {
+  text-align: center;
+  padding: 20px 10px 10px;
+  animation: fadeIn 0.4s ease;
+}
+
+.success-icon {
+  font-size: 3.5rem;
+  color: var(--success-green);
+  margin-bottom: 16px;
+}
+
+.success-message h2 {
+  color: var(--text-dark);
+  margin-bottom: 10px;
+}
+
+.success-message p {
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .chat-card { padding: 22px; }
+  .formation-grid { grid-template-columns: 1fr 1fr; }
+  .nav-buttons { flex-direction: column-reverse; }
+  .btn-primary { margin-left: 0; }
+}

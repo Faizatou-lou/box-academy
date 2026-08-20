@@ -1,0 +1,45 @@
+<div class="dashboard-container">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/logo-box-removebg-preview.png" alt="Formation Academy" class="sidebar-logo" />
+    </div>
+
+    <a routerLink="/" class="btn-voir-site">
+       Voir le site
+    </a>
+
+    <nav class="sidebar-nav">
+      <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item">
+        Tableau de bord
+      </a>
+      <a routerLink="/admin/formations" routerLinkActive="active" class="nav-item">
+        Formations
+      </a>
+      <a routerLink="/admin/cours" routerLinkActive="active" class="nav-item">
+        Cours
+      </a>
+      <a routerLink="/admin/inscriptions" routerLinkActive="active" class="nav-item">
+        Inscriptions
+      </a>
+      <a routerLink="/admin/profil" routerLinkActive="active" class="nav-item">
+        Mon profil
+      </a>
+
+      <a routerLink="/admin/prospection" routerLinkActive="active" class="nav-item">
+        Prospection
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout" (click)="seDeconnecter()">
+        Se déconnecter
+      </button>
+    </div>
+  </aside>
+
+  <main class="dashboard-main">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>

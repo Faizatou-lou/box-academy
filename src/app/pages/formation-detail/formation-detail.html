@@ -1,0 +1,111 @@
+<section class="detail-container">
+  @if (formation) {
+    <div class="detail-header">
+      <a routerLink="/formations" class="btn-retour">← Retour aux formations</a>
+      <span class="detail-badge" [class.certifiante]="formation.certifiante">
+        {{ formation.certifiante ? 'Certifiante' : 'Non certifiante' }}
+      </span>
+    </div>
+
+    <div class="detail-content">
+      <div class="detail-main">
+        <h1 class="detail-titre">{{ formation.titre }}</h1>
+        <p class="detail-descriptif">{{ formation.descriptif }}</p>
+
+        <div class="detail-axes">
+          <h3>Axes de formation</h3>
+          <div class="axes-list">
+            @for (axe of formation.axes; track axe) {
+              <span class="axe-tag">✓ {{ axe }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="detail-dates">
+          <h3>Dates</h3>
+          <div class="dates-grid">
+            <div class="date-card">
+              <span class="date-label">Date de début</span>
+              <span class="date-value">{{ formation.dateDebut }}</span>
+            </div>
+            <div class="date-card">
+              <span class="date-label">Date de fin</span>
+              <span class="date-value">{{ formation.dateFin }}</span>
+            </div>
+          </div>
+        </div>
+
+<div class="detail-cours">
+  <h3>📚 Contenu du cours</h3>
+
+  @if (!emailSaisi) {
+    <div class="verif-card">
+      <p>Entrez votre email pour accéder au contenu du cours.</p>
+      <div class="verif-form">
+        <input
+          type="email"
+          [(ngModel)]="emailProspect"
+          placeholder="votre@email.com"
+          class="verif-input"
+        />
+        <button class="btn-verifier" (click)="soumettreEmail()" [disabled]="enregistrementEnCours">
+          {{ enregistrementEnCours ? 'Chargement...' : 'Voir le cours' }}
+        </button>
+      </div>
+      @if (erreurEmail) {
+        <div class="error-message">{{ erreurEmail }}</div>
+      }
+    </div>
+  }
+@if (emailSaisi) {
+    <div class="acces-deja-valide">
+      <p>Vous avez déjà accès au contenu de ce cours.</p>
+      <a [routerLink]="['/formation-detail', formation.id, 'cours']" class="btn-verifier">
+        📚 Voir le cours
+      </a>
+    </div>
+  }
+  
+@if (isDev) {
+  <button class="btn-dev-reset" (click)="resetEmailDev()">
+    🔧 [DEV] Réinitialiser l'accès pour cette formation
+  </button>
+}
+
+
+
+
+</div>
+      </div>
+
+      <div class="detail-sidebar">
+        <div class="sidebar-card">
+          <h3>Intéressé par cette formation ?</h3>
+          <p>Remplissez le formulaire d'inscription et notre équipe vous contactera.</p>
+          <a [routerLink]="['/inscription']" [queryParams]="{formation: formation.id}" class="btn-inscrire">
+            S'inscrire à cette formation
+          </a>
+        </div>
+
+        <div class="sidebar-info">
+          <div class="info-item">
+            <span class="info-label">Type</span>
+            <span class="info-value">{{ formation.certifiante ? 'Certifiante' : 'Non certifiante' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Statut</span>
+            <span class="info-value">{{ formation.statut }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  } @else {
+    <div class="not-found">
+      <h2>Formation introuvable</h2>
+      <p>La formation que vous cherchez n'existe pas.</p>
+      <a routerLink="/formations" class="btn-retour">← Retour aux formations</a>
+    </div>
+  }
+
+</section>

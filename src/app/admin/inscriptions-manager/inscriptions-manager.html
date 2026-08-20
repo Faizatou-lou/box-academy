@@ -1,0 +1,95 @@
+<div class="dashboard-header">
+  <div>
+    <h1>Gestion des inscriptions</h1>
+    <p>Validez ou rejetez les demandes d'inscription</p>
+  </div>
+</div>
+
+<div class="filtres">
+  <button
+    class="filtre-btn"
+    [class.active]="filtreStatut === 'tous'"
+    (click)="filtrerStatut('tous')"
+  >
+    Toutes ({{ inscriptions.length }})
+  </button>
+  <button
+    class="filtre-btn"
+    [class.active]="filtreStatut === 'en-attente'"
+    (click)="filtrerStatut('en-attente')"
+  >
+    En attente ({{ compterStatut('en-attente') }})
+  </button>
+  <button
+    class="filtre-btn"
+    [class.active]="filtreStatut === 'validée'"
+    (click)="filtrerStatut('validée')"
+  >
+    Validées ({{ compterStatut('validée') }})
+  </button>
+  <button
+    class="filtre-btn"
+    [class.active]="filtreStatut === 'rejetée'"
+    (click)="filtrerStatut('rejetée')"
+  >
+    Rejetées ({{ compterStatut('rejetée') }})
+  </button>
+</div>
+
+<div class="table-card">
+  <div class="table-header">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Rechercher un apprenant..."
+      [(ngModel)]="recherche"
+    />
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Nom complet</th>
+        <th>Email</th>
+        <th>Téléphone</th>
+        <th>Formation</th>
+        <th>Date</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (inscription of inscriptionsFiltrees(); track inscription.id) {
+        <tr>
+          <td>{{ inscription.nom }} {{ inscription.prenom }}</td>
+          <td>{{ inscription.email }}</td>
+          <td>{{ inscription.telephone }}</td>
+          <td>{{ inscription.formation?.titre }}</td>
+          <td>{{ inscription.date }}</td>
+          <td>
+            <span class="badge" [class]="inscription.statut">
+              {{ inscription.statut }}
+            </span>
+          </td>
+          <td class="actions">
+            @if (inscription.statut === 'en-attente') {
+              <button class="btn-valider" (click)="valider(inscription.id)">
+                ✅ Valider
+              </button>
+              <button class="btn-rejeter" (click)="rejeter(inscription.id)">
+                ❌ Rejeter
+              </button>
+            } @else {
+              <span class="traite">Traité</span>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (inscriptionsFiltrees().length === 0) {
+    <div class="no-result">Aucune inscription trouvée.</div>
+  }
+
+</div>

@@ -1,0 +1,56 @@
+<section class="otp-container">
+
+  <div class="otp-card">
+
+    <div class="otp-header">
+      <div class="otp-icon">🔐</div>
+      <h1>Vérification OTP</h1>
+      <p>Un code à 6 chiffres a été envoyé à votre email</p>
+      <span class="otp-email">admin&#64;formationacademy.bf</span>
+    </div>
+
+    <form class="otp-form" (ngSubmit)="verifier()">
+
+      <div class="otp-inputs">
+        @for (i of [0,1,2,3,4,5]; track i) {
+          <input
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            [(ngModel)]="otpDigits[i]"
+            [name]="'otp' + i"
+            (keyup)="onKeyUp($event, i)"
+            (keydown)="onKeyDown($event, i)"
+          />
+        }
+      </div>
+
+      @if (erreur) {
+        <div class="error-message">{{ erreur }}</div>
+      }
+
+      @if (success) {
+        <div class="success-message">Code vérifié avec succès !</div>
+      }
+
+      <button type="submit" class="btn-verify" [disabled]="chargement">
+        @if (chargement) {
+          Vérification...
+        } @else {
+          Vérifier le code
+        }
+      </button>
+
+      <div class="otp-resend">
+        <p>Vous n'avez pas reçu le code ?</p>
+        <button type="button" class="btn-resend" (click)="renvoyer()">
+          Renvoyer le code
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</section>
+

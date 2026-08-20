@@ -1,0 +1,151 @@
+.otp-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a3a6b 0%, #0d2247 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.otp-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.otp-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.otp-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.otp-header h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #111111;
+  margin-bottom: 0.5rem;
+}
+
+.otp-header p {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.otp-email {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a3a6b;
+}
+
+.otp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.otp-inputs {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.otp-input {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s;
+  color: #111111;
+}
+
+.otp-input:focus {
+  border-color: #1a3a6b;
+}
+
+.error-message {
+  background-color: #fef2f2;
+  border: 0.5px solid #fecaca;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #dc2626;
+  font-size: 13px;
+  text-align: center;
+}
+
+.success-message {
+  background-color: #f0fdf4;
+  border: 0.5px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #16a34a;
+  font-size: 13px;
+  text-align: center;
+}
+
+.btn-verify {
+  background-color: #1a3a6b;
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  width: 100%;
+}
+
+.btn-verify:hover {
+  opacity: 0.9;
+}
+
+.btn-verify:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.otp-resend {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.otp-resend p {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.btn-resend {
+  background: none;
+  border: none;
+  color: #1a3a6b;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .otp-card {
+    padding: 1.5rem;
+  }
+
+  .otp-input {
+    width: 40px;
+    height: 48px;
+    font-size: 1.2rem;
+  }
+}

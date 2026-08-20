@@ -1,0 +1,78 @@
+<!-- Bouton flottant -->
+<div class="conteneur-bouton" [class.ouvert]="panneauOuvert()">
+  <span class="onde" *ngIf="!panneauOuvert()"></span>
+  <span class="onde onde-2" *ngIf="!panneauOuvert()"></span>
+  <span class="onde onde-3" *ngIf="!panneauOuvert()"></span>
+
+  <button class="bouton-flottant" [class.actif]="panneauOuvert()" (click)="togglePanneau()" aria-label="Ouvrir le chat">
+    @if (!panneauOuvert()) {
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <path d="M12 3C7 3 3 6.6 3 11c0 2.4 1.2 4.6 3.1 6.1-.1 1-.5 2.3-1.4 3.4 1.6-.2 3-.9 4-1.6 1 .3 2.1.4 3.3.4 5 0 9-3.6 9-8S17 3 12 3z" fill="white"/>
+        <path d="M8.5 10.5l1.8 1.8 3.7-3.7" stroke="#1c7fab" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    } @else {
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+    }
+  </button>
+
+  @if (aNouveaute() && !panneauOuvert()) {
+    <div class="badge-nouveaute">1</div>
+  }
+</div>
+
+<!-- Overlay + panneau conversation -->
+@if (panneauOuvert()) {
+  <div class="overlay" (click)="fermer()"></div>
+
+  <div class="panneau-chat">
+    <div class="panneau-header">
+      <div class="avatar-header">BA</div>
+      <div class="infos-header">
+        <h3>Box Academy</h3>
+        <p><span class="pastille"></span> Assistant IA en ligne</p>
+      </div>
+      <button class="btn-fermer" (click)="fermer()" aria-label="Fermer">×</button>
+    </div>
+
+    <div class="zone-messages" #zoneMessages>
+      @for (msg of messages(); track $index) {
+        @if (msg.role === 'assistant') {
+          <div class="ligne-message bot">
+            <div class="avatar-mini"></div>
+           <div class="bulle bulle-bot" [innerHTML]="formaterTexte(msg.content)"></div>
+          </div>
+        } @else {
+          <div class="ligne-message user">
+            <div class="bulle bulle-user">{{ msg.content }}</div>
+          </div>
+        }
+      }
+
+      @if (enChargement()) {
+        <div class="ligne-message bot">
+          <div class="avatar-mini"></div>
+          <div class="bulle bulle-bot indicateur-frappe">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="zone-saisie">
+      <input
+        type="text"
+        placeholder="Écris ta question..."
+        [(ngModel)]="texteSaisi"
+        (keydown)="gererEntree($event)"
+        [disabled]="enChargement()|| nombreMessagesEnvoyes() >= limiteMessages"
+      />
+      <button class="btn-envoyer" (click)="envoyerMessage()" [disabled]="enChargement() || !texteSaisi.trim() || nombreMessagesEnvoyes() >= limiteMessages" aria-label="Envoyer">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+          <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+}

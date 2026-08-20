@@ -1,0 +1,152 @@
+<div class="dashboard-header">
+  <div>
+    <h1>Gestion des formations</h1>
+    <p>Ajoutez, modifiez ou supprimez des formations</p>
+  </div>
+  <button class="btn-ajouter" (click)="ouvrirFormulaire()">
+    + Ajouter une formation
+  </button>
+</div>
+
+@if (showFormulaire) {
+  <div class="modal-overlay" (click)="annuler()">
+    <div class="formulaire-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+      <h2>{{ modeEdition ? 'Modifier la formation' : 'Nouvelle formation' }}</h2>
+<button class="btn-close" (click)="annuler()">✕</button>
+
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Titre <span class="required">*</span></label>
+          <input type="text" [(ngModel)]="formData.titre" placeholder="Titre de la formation" />
+        </div>
+
+        <div class="form-group">
+          <label>Type <span class="required">*</span></label>
+          <select [(ngModel)]="formData.certifiante">
+            <option [value]="true">Certifiante</option>
+            <option [value]="false">Non certifiante</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Statut <span class="required">*</span></label>
+          <select [(ngModel)]="formData.statut">
+            <option value="Disponible">Disponible</option>
+            <option value="a-venir">À venir (annonce sur l'accueil)</option>
+            <option value="terminée">Terminée</option>
+          </select>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Descriptif <span class="required">*</span></label>
+          <textarea [(ngModel)]="formData.descriptif" rows="3" placeholder="Description de la formation"></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Axes de formation (séparés par des virgules)</label>
+          <input type="text" [(ngModel)]="formData.axesString" placeholder="Ex: HTML/CSS, JavaScript, Angular" />
+        </div>
+
+        <div class="form-group">
+          <label>Date de début</label>
+          <input type="date" [(ngModel)]="formData.dateDebut" />
+        </div>
+
+        <div class="form-group">
+          <label>Date de fin</label>
+          <input type="date" [(ngModel)]="formData.dateFin" />
+        </div>
+
+<div class="form-group">
+  <label>src\assets\logos</label>
+  <input type="text" [(ngModel)]="formData.icone" placeholder="Ex: angular.png" />
+</div>
+<div class="form-group full-width">
+  <label>Couleur de la bannière</label>
+  <div class="couleur-picker-row">
+    <input type="color" [(ngModel)]="formData.couleur" class="couleur-input-natif" />
+    <span class="couleur-hex-affiche">{{ formData.couleur }}</span>
+  </div>
+  <div class="suggestions-couleurs">
+    @for (suggestion of suggestionsCouleurs; track suggestion.hex) {
+      <button
+        type="button"
+        class="pastille-couleur"
+        [style.background]="suggestion.hex"
+        [class.selectionnee]="formData.couleur === suggestion.hex"
+        (click)="choisirCouleur(suggestion.hex)"
+        [title]="suggestion.nom"
+      ></button>
+    }
+  </div>
+</div>
+
+      </div>
+
+      @if (erreur) {
+        <div class="error-message">{{ erreur }}</div>
+      }
+
+      <div class="form-actions">
+        <button class="btn-annuler" (click)="annuler()">Annuler</button>
+        <button class="btn-sauvegarder" (click)="sauvegarder()">
+          {{ modeEdition ? 'Modifier' : 'Ajouter' }}
+        </button>
+      </div>
+      </div>
+  </div>
+}
+
+<div class="table-card">
+  <div class="table-header">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Rechercher une formation..."
+      [(ngModel)]="recherche"
+    />
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th>Type</th>
+        <th>Statut</th>
+        <th>Date début</th>
+        <th>Date fin</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (formation of formationsFiltrees(); track formation.id) {
+        <tr>
+          <td>{{ formation.titre }}</td>
+          <td>
+            <span class="badge" [class.certifiante]="formation.certifiante">
+              {{ formation.certifiante ? 'Certifiante' : 'Non certifiante' }}
+            </span>
+          </td>
+          <td>
+            <span class="badge-statut" [class]="formation.statut">
+              {{ formation.statut === 'a-venir' ? 'À venir' : formation.statut === 'terminée' ? 'Terminée' : 'Disponible' }}
+            </span>
+          </td>
+          <td>{{ formation.dateDebut }}</td>
+          <td>{{ formation.dateFin }}</td>
+          <td class="actions">
+            <button class="btn-edit" (click)="editer(formation)">✏️ Modifier</button>
+            <button class="btn-delete" (click)="supprimer(formation.id)">🗑️ Supprimer</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (formationsFiltrees().length === 0) {
+    <div class="no-result">Aucune formation trouvée.</div>
+  }
+
+</div>

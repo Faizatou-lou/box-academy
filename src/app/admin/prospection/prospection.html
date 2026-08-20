@@ -1,0 +1,67 @@
+<div class="dashboard-header">
+  <div>
+    <h1>Prospection</h1>
+    <p>Emails des visiteurs ayant consulté un contenu de cours</p>
+  </div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-label">Total visites</span>
+    <span class="stat-value">{{ totalProspects }}</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Emails uniques</span>
+    <span class="stat-value">{{ emailsUniques }}</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">À contacter</span>
+    <span class="stat-value">{{ nonContactes }}</span>
+  </div>
+</div>
+
+@if (chargement) {
+  <p>Chargement...</p>
+}
+
+@if (!chargement) {
+  <div class="prospects-card">
+    @if (prospects.length === 0) {
+      <p class="no-result">Aucun prospect enregistré pour le moment.</p>
+    }
+
+    @if (prospects.length > 0) {
+      <table class="prospects-table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Cours consulté</th>
+            <th>Date</th>
+            <th>Statut</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of prospects; track p.id) {
+            <tr>
+              <td>{{ p.email }}</td>
+              <td>{{ p.coursConsulte }}</td>
+              <td>{{ p.dateConsultation | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                <span [class.contacte]="p.contacte" [class.non-contacte]="!p.contacte">
+                  {{ p.contacte ? 'Contacté' : 'En attente' }}
+                </span>
+              </td>
+              <td>
+                <a href="mailto:{{ p.email }}">Écrire</a>
+                @if (!p.contacte) {
+                  <button (click)="marquerContacte(p.id)">Marquer contacté</button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+}

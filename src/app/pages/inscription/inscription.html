@@ -1,0 +1,182 @@
+@if (success) {
+  <div class="success-message">
+    <div class="success-icon"><i class="ti ti-circle-check"></i></div>
+    <h2>Inscription envoyée avec succès !</h2>
+    <p>
+      Merci {{ formData.prenom }}, notre équipe vous contactera bientôt pour confirmer
+      votre inscription à « {{ formData.formation }} ».
+    </p>
+    <a routerLink="/formations" class="btn-primary">Voir d'autres formations</a>
+  </div>
+} @else {
+
+  <div class="progress-bar-container">
+    <div class="progress-bar-fill" [style.width.%]="progressPercent"></div>
+  </div>
+  <div class="progress-steps">
+    <span>Étape {{ currentStep }} sur {{ totalSteps }}</span>
+  </div>
+
+  <div class="chat-card">
+
+    <div class="bot-message">
+      <div class="bot-avatar"><i class="ti ti-robot"></i></div>
+      <div class="bot-bubble"><p>{{ getBotMessage() }}</p></div>
+    </div>
+
+    @switch (currentStep) {
+    <!-- ETAPE 1 : Formation -->
+      @case (1) {
+        <div class="step-content">
+          @if (!formationsChargees) {
+            <p class="loading-text">Chargement des formations...</p>
+          } @else {
+            <div class="formation-grid">
+              @for (formation of formations; track trackByFormationId($index, formation)) {
+                <button
+                  type="button"
+                  class="formation-card"
+                  [class.selected]="formData.formationId === formation.id"
+                  [style.--category-color]="formation.categorie?.couleur"
+                  (click)="selectFormation(formation)">
+                  <div class="formation-icon">
+                    @if (formation.categorie?.icone) {
+                      <app-category-icon [name]="formation.categorie.icone"></app-category-icon>
+                    } @else {
+                      <i class="ti ti-school"></i>
+                    }
+                  </div>
+                  <h3>{{ formation.titre }}</h3>
+                  @if (formation.certifiante) {
+                    <span class="mini-badge">Certifiante</span>
+                  }
+                </button>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      <!-- ETAPE 2 : Prénom -->
+      @case (2) {
+        <div class="step-content">
+          <div class="user-input-row">
+            <i class="ti ti-user-circle input-icon"></i>
+            <input
+              type="text"
+              class="chat-input"
+              placeholder="Votre prénom..."
+              [(ngModel)]="formData.prenom"
+              name="prenom"
+              (keyup.enter)="nextStep()"
+              autofocus />
+          </div>
+        </div>
+      }
+
+      <!-- ETAPE 3 : Nom -->
+      @case (3) {
+        <div class="step-content">
+          <div class="user-input-row">
+            <i class="ti ti-user input-icon"></i>
+            <input
+              type="text"
+              class="chat-input"
+              placeholder="Votre nom..."
+              [(ngModel)]="formData.nom"
+              name="nom"
+              (keyup.enter)="nextStep()"
+              autofocus />
+          </div>
+        </div>
+      }
+
+      <!-- ETAPE 4 : Contact -->
+      @case (4) {
+        <div class="step-content">
+          <div class="user-input-row">
+            <i class="ti ti-mail input-icon"></i>
+            <input
+              type="email"
+              class="chat-input"
+              placeholder="votre@email.com"
+              [(ngModel)]="formData.email"
+              name="email"
+              autofocus />
+          </div>
+          <div class="user-input-row">
+            <i class="ti ti-phone input-icon"></i>
+            <input
+              type="tel"
+              class="chat-input"
+              placeholder="+226 XX XX XX XX"
+              [(ngModel)]="formData.telephone"
+              name="telephone"
+              (keyup.enter)="nextStep()" />
+          </div>
+        </div>
+      }
+
+      <!-- ETAPE 5 : Message + récap + soumission -->
+      @case (5) {
+        <div class="step-content">
+          <div class="user-input-row textarea-row">
+            <i class="ti ti-message input-icon"></i>
+            <textarea
+              class="chat-input"
+              rows="3"
+              placeholder="Des questions ou informations supplémentaires..."
+              [(ngModel)]="formData.message"
+              name="message">
+            </textarea>
+          </div>
+
+          @if (formationPreselectionnee) {
+            <div class="formation-recap">
+              <span>Formation : <strong>{{ formData.formation }}</strong></span>
+              <button type="button" class="link-button" (click)="changerFormation()">Changer</button>
+            </div>
+          }
+
+          @if (erreur) {
+            <p class="error-message">
+              <i class="ti ti-alert-circle"></i> {{ erreur }}
+            </p>
+          }
+        </div>
+      }
+    }
+
+    <!-- Navigation -->
+    @if (currentStep > 1) {
+      <div class="nav-buttons">
+        <button type="button" class="btn btn-secondary" (click)="prevStep()">
+          <i class="ti ti-arrow-left"></i> Retour
+        </button>
+
+        @if (currentStep < totalSteps) {
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="!canContinue()"
+            (click)="nextStep()">
+            Continuer <i class="ti ti-arrow-right"></i>
+          </button>
+        } @else {
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="chargement"
+            (click)="soumettre()">
+            @if (chargement) {
+              Envoi en cours...
+            } @else {
+              <i class="ti ti-send"></i> Envoyer ma demande
+            }
+          </button>
+        }
+      </div>
+    }
+
+  </div>
+}

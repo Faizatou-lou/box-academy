@@ -1,0 +1,174 @@
+/* prospection.css */
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem;
+}
+
+.dashboard-header p {
+  color: #666;
+  margin: 0;
+}
+
+/* Stats en haut */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(41, 171, 226, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 4px 20px rgba(41, 171, 226, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(41, 171, 226, 0.15);
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.stat-value {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #29ABE2;
+}
+
+/* Carte contenant le tableau */
+.prospects-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(41, 171, 226, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(41, 171, 226, 0.08);
+}
+
+.no-result {
+  text-align: center;
+  color: #888;
+  padding: 2rem 0;
+}
+
+/* Tableau */
+.prospects-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.prospects-table thead th {
+  text-align: left;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #666;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid rgba(41, 171, 226, 0.15);
+}
+
+.prospects-table tbody tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  transition: background 0.15s ease;
+}
+
+.prospects-table tbody tr:hover {
+  background: rgba(41, 171, 226, 0.05);
+}
+
+.prospects-table tbody td {
+  padding: 0.85rem 1rem;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+}
+
+/* Badges de statut */
+.contacte,
+.non-contacte {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.contacte {
+  background: rgba(46, 204, 113, 0.15);
+  color: #1e8449;
+}
+
+.non-contacte {
+  background: rgba(230, 126, 34, 0.15);
+  color: #b9591a;
+}
+
+/* Actions dans la dernière colonne */
+.prospects-table td:last-child {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.prospects-table a {
+  color: #29ABE2;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.prospects-table a:hover {
+  text-decoration: underline;
+}
+
+.prospects-table button {
+  background: #29ABE2;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.prospects-table button:hover {
+  background: #1f8fc4;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prospects-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

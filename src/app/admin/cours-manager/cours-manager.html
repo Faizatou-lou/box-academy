@@ -1,0 +1,141 @@
+<div class="dashboard-header">
+  <div>
+    <h1>Gestion des cours</h1>
+    <p>Ajoutez le contenu pédagogique de chaque formation</p>
+  </div>
+</div>
+
+<div class="cours-layout">
+
+  <div class="formations-select-card">
+    <h2>Formations</h2>
+    <div class="formations-select-list">
+      @for (formation of formations; track formation.id) {
+        <div
+          class="formation-select-item"
+          [class.active]="formationSelectionneeId === formation.id"
+          (click)="selectionnerFormation(formation.id)">
+          {{ formation.titre }}
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="cours-content">
+
+    @if (!formationSelectionneeId) {
+      <div class="placeholder-card">
+        <p>← Sélectionnez une formation pour gérer ses cours.</p>
+      </div>
+    }
+
+    @if (formationSelectionneeId) {
+      <div class="upload-card">
+        <h2>{{ coursEnEditionId ? 'Modifier le cours' : 'Ajouter un fichier de cours' }}</h2>
+
+        <div class="form-group">
+          <label>Titre <span class="required">*</span></label>
+          <input type="text" [(ngModel)]="titre" placeholder="Ex: Introduction au module 1" />
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="description" rows="2" placeholder="Description courte du contenu"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Fichier {{ coursEnEditionId ? '(laisser vide pour garder le fichier actuel)' : '' }} </label>
+          <input type="file" #fichierInput (change)="onFichierChange($event)" />
+          @if (fichierSelectionne) {
+            <div class="fichier-selectionne-row">
+              <span class="fichier-nom">📎 {{ fichierSelectionne.name }}</span>
+              <button type="button" class="btn-retirer-fichier" (click)="retirerFichier(fichierInput)">✕</button>
+            </div>
+          }
+        </div>
+<div class="form-group">
+  <label>Support lié à la vidéo <span class="optionnel">(facultatif)</span></label>
+  <input type="file" #fichierVideoInput (change)="onFichierVideoChange($event)" />
+  @if (fichierVideoSelectionne) {
+    <div class="fichier-selectionne-row">
+      <span class="fichier-nom">📎 {{ fichierVideoSelectionne.name }}</span>
+      <button type="button" class="btn-retirer-fichier" (click)="retirerFichierVideo(fichierVideoInput)">✕</button>
+    </div>
+  }
+</div>
+        <div class="section-optionnelle">
+          <div class="section-header">
+            <label>Vidéos YouTube <span class="optionnel">(facultatif)</span></label>
+            <button type="button" class="btn-ajouter-lien" (click)="ajouterChampYoutube()">+ Ajouter</button>
+          </div>
+          @for (lien of liensYoutube; track $index) {
+            <div class="ligne-lien">
+              <input type="text" [(ngModel)]="liensYoutube[$index]" placeholder="https://www.youtube.com/watch?v=..." />
+              <button type="button" class="btn-retirer-lien" (click)="retirerChampYoutube($index)">✕</button>
+            </div>
+          }
+        </div>
+
+        <div class="section-optionnelle">
+          <div class="section-header">
+            <label>Liens Google <span class="optionnel">(facultatif)</span></label>
+            <button type="button" class="btn-ajouter-lien" (click)="ajouterChampGoogle()">+ Ajouter</button>
+          </div>
+          @for (lien of liensGoogle; track $index) {
+            <div class="ligne-lien">
+              <input type="text" [(ngModel)]="liensGoogle[$index]" placeholder="https://docs.google.com/..." />
+              <button type="button" class="btn-retirer-lien" (click)="retirerChampGoogle($index)">✕</button>
+            </div>
+          }
+        </div>
+
+        @if (erreur) {
+          <div class="error-message">{{ erreur }}</div>
+        }
+        @if (succes) {
+          <div class="success-message">{{ succes }}</div>
+        }
+
+        <div class="form-actions">
+          <button class="btn-uploader" (click)="soumettre(fichierInput)" [disabled]="chargement">
+            {{ chargement ? 'Envoi en cours...' : (coursEnEditionId ? '✓ Enregistrer les modifications' : '⬆ Ajouter le cours') }}
+          </button>
+          @if (coursEnEditionId) {
+            <button class="btn-annuler-edition" (click)="annulerEdition()">Annuler</button>
+          }
+        </div>
+      </div>
+
+      <div class="cours-liste-card">
+        <h2>Cours existants</h2>
+        @if (coursListe.length === 0) {
+          <p class="no-result">Aucun cours ajouté pour cette formation.</p>
+        }
+        @for (cours of coursListe; track cours.id) {
+          <div class="cours-item-admin" [class.en-edition]="coursEnEditionId === cours.id">
+            <div class="cours-item-info">
+              <span class="cours-item-titre">{{ cours.titre }}</span>
+              <span class="cours-item-fichier">📎 {{ cours.nomFichier }}</span>
+              @if (cours.liensYoutube?.length || cours.liensGoogle?.length) {
+                <div class="cours-item-badges">
+                  @if (cours.liensYoutube?.length) {
+                    <span class="badge">▶ {{ cours.liensYoutube.length }}</span>
+                  }
+                  @if (cours.liensGoogle?.length) {
+                    <span class="badge">🔗 {{ cours.liensGoogle.length }}</span>
+                  }
+                </div>
+              }
+            </div>
+            <div class="cours-item-actions">
+              <button class="btn-modifier-cours" (click)="editerCours(cours)">✏️</button>
+              <button class="btn-supprimer-cours" (click)="supprimerCours(cours.id)">🗑️</button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+
+</div>

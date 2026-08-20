@@ -1,0 +1,143 @@
+<div class="dashboard-header">
+  <div>
+    <h1>Tableau de bord</h1>
+    <p>Bienvenue, Administrateur</p>
+  </div>
+  <div class="header-date">{{ dateAujourdhui }}</div>
+</div>
+
+<div class="hero-card">
+  <div class="hero-glow"></div>
+  <div class="hero-top">
+    <div class="hero-total">
+      <p class="hero-label">TOTAL INSCRIPTIONS</p>
+      <div class="hero-number-row">
+        <span class="hero-number">{{ totalAffiche }}</span>
+      </div>
+      <p class="hero-hint">{{ hintAffiche }}</p>
+    </div>
+
+    <div class="pills-row">
+      @for (pill of statPills; track pill.key) {
+        <div class="stat-pill"
+             [class.active]="selectedPill === pill.key"
+             [attr.data-key]="pill.key"
+             (click)="selectPill(pill.key)">
+          <div class="pill-icon">{{ pill.icone }}</div>
+          <span class="pill-count">{{ pill.count }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="sparkline-wrapper">
+    <canvas #sparkline></canvas>
+  </div>
+</div>
+
+<div class="dashboard-sections">
+
+  <div class="section-card">
+    <div class="section-header">
+      <h2>Dernières inscriptions</h2>
+      <a routerLink="/admin/inscriptions" class="see-all">Voir tout →</a>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Formation</th>
+          <th>Date</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (inscription of dernieresInscriptions; track inscription.id) {
+          <tr>
+            <td>{{ inscription.nom }}</td>
+            <td>{{ inscription.formation?.titre }}</td>
+            <td>{{ inscription.date }}</td>
+            <td>
+              <span class="badge" [class]="inscription.statut">
+                {{ inscription.statut }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+ <div class="section-card">
+  <div class="section-header">
+    <h2>Formations</h2>
+    <a routerLink="/admin/formations" class="see-all">Voir tout →</a>
+  </div>
+  <div class="formations-list">
+    @for (formation of dernieresFormations; track formation.id) {
+      <div class="formation-item">
+        <div class="formation-info">
+          <span class="formation-titre">{{ formation.titre }}</span>
+          <span class="formation-badge" [class.certifiante]="formation.certifiante">
+            {{ formation.certifiante ? 'Certifiante' : 'Non certifiante' }}
+          </span>
+        </div>
+        <span class="formation-count">{{ compterInscritsParFormation(formation.id) }} inscrit(s)</span>
+      </div>
+    }
+  </div>
+</div>
+<div class="dashboard-sections" style="margin-top: 1.5rem;">
+
+  <div class="section-card">
+    <div class="section-header">
+      <div>
+        <h2>Classement des formations</h2>
+        <p class="hint">Nombre d'inscrits par formation</p>
+      </div>
+      <span class="trophy">🏆</span>
+    </div>
+    <div class="rank-list">
+      @for (f of classementFormations; track f.titre) {
+        <div class="rank-row">
+          <div class="rank-row-top">
+            <span class="rank-name">
+              <span class="rank-badge" [class.rank-badge-gold]="f.rang === 1">{{ f.rang }}</span>
+              {{ f.titre }}
+              @if (f.hot) {
+                <span class="badge-hot">🔥 Tendance</span>
+              }
+            </span>
+            <span class="rank-total">{{ f.total }}</span>
+          </div>
+          <div class="rank-bar-bg">
+            <div class="rank-bar-fill" [class.rank-bar-top]="f.rang === 1" [style.width.%]="f.pct"></div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h2 style="margin-bottom: 4px;">Par année</h2>
+    <p class="hint" style="margin-bottom: 1rem;">Cliquez un anneau ou une ligne</p>
+    <div class="donut-wrapper">
+      <canvas #chartAnnees></canvas>
+      <div class="donut-center">
+        <p class="donut-value">{{ donutCenterValue }}</p>
+        <p class="donut-label">{{ donutCenterLabel }}</p>
+      </div>
+    </div>
+    <div class="year-list">
+      @for (y of recapAnnees; track y.annee; let i = $index) {
+        <div class="year-row" (click)="selectYear(i)">
+          <span class="year-name">
+            <span class="year-dot" [style.background]="y.couleur"></span>{{ y.annee }}
+          </span>
+          <span class="year-total">{{ y.total }} <span class="year-pct">({{ y.pct }}%)</span></span>
+        </div>
+      }
+    </div>
+  </div>
+
+</div>

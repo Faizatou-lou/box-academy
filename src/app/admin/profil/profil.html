@@ -1,0 +1,191 @@
+<div class="profil-page-bg">
+<div class="dashboard-header">
+  <div>
+    <h1>Mon profil</h1>
+    <p>Modifiez vos informations personnelles</p>
+  </div>
+</div>
+
+<div class="profil-container">
+ <div class="profil-avatar-card">
+    <div class="avatar-glow"></div>
+    <div class="avatar-glow-2"></div>
+    <div class="avatar-wrapper" [style.--particule-color]="couleurParticule">
+      <div class="avatar-halo"></div>
+      <div class="avatar-circle">{{ initiales }}</div>
+      <span class="particule"></span>
+      <span class="particule"></span>
+      <span class="particule"></span>
+      <span class="particule"></span>
+      <span class="particule"></span>
+      <span class="particule"></span>
+    </div>
+    <h2>{{ profil.nom }} {{ profil.prenom }}</h2>
+    <p>{{ profil.email }}</p>
+    <span class="role-badge">🛡️ Administrateur</span>
+  </div>
+
+  <div class="profil-form-card">
+
+    <div class="tabs">
+      <button
+        class="tab-btn"
+        [class.active]="ongletActif === 'infos'"
+        (click)="ongletActif = 'infos'"
+      >
+        👤 Informations personnelles
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="ongletActif === 'password'"
+        (click)="ongletActif = 'password'"
+      >
+        🔒 Mot de passe
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="ongletActif === 'apparence'"
+        (click)="ongletActif = 'apparence'"
+      >
+        🎨 Apparence
+      </button>
+    </div>
+
+    @if (ongletActif === 'infos') {
+      <div class="form-section">
+
+        @if (successInfos) {
+          <div class="success-message">✓ Informations mises à jour avec succès !</div>
+        }
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>NOM</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" [(ngModel)]="profil.nom" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>PRÉNOM</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" [(ngModel)]="profil.prenom" />
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label>EMAIL</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input type="email" [(ngModel)]="profil.email" />
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label>TÉLÉPHONE</label>
+            <div class="input-wrap">
+              <span class="input-icon">📞</span>
+              <input type="tel" [(ngModel)]="profil.telephone" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-sauvegarder" (click)="sauvegarderInfos()">
+            💾 Sauvegarder les modifications
+          </button>
+        </div>
+
+      </div>
+    }
+
+    @if (ongletActif === 'password') {
+      <div class="form-section">
+
+        @if (successPassword) {
+          <div class="success-message">✓ Mot de passe modifié avec succès !</div>
+        }
+
+        @if (erreurPassword) {
+          <div class="error-message">⚠ {{ erreurPassword }}</div>
+        }
+
+        <div class="form-group">
+          <label>MOT DE PASSE ACTUEL</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔑</span>
+            <input type="password" [(ngModel)]="passwordData.actuel" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>NOUVEAU MOT DE PASSE</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" [(ngModel)]="passwordData.nouveau" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>CONFIRMER LE NOUVEAU MOT DE PASSE</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" [(ngModel)]="passwordData.confirmation" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-sauvegarder" (click)="changerMotDePasse()">
+            Changer le mot de passe
+          </button>
+        </div>
+
+      </div>
+    }
+
+    @if (ongletActif === 'apparence') {
+      <div class="form-section">
+        <p style="font-size: 13px; color: #6b7280; margin: 0 0 1rem;">
+          Choisissez la couleur principale de votre interface.
+        </p>
+        <div class="couleur-grid">
+          @for (preset of themeService.presets; track preset.valeur) {
+            <div
+              class="couleur-option"
+              [class.selectionnee]="couleurSelectionnee === preset.valeur"
+              [style.background]="preset.valeur"
+              (click)="changerCouleur(preset.valeur)"
+              [title]="preset.nom">
+              @if (couleurSelectionnee === preset.valeur) {
+                <span class="couleur-check">✓</span>
+              }
+            </div>
+          }
+        </div>
+        <div style="margin-top: 1.5rem;">
+          <label style="font-size: 11px; font-weight: 600; color: #9ca3af; letter-spacing: 0.03em;">COULEUR PERSONNALISÉE</label>
+          <input
+            type="color"
+            [value]="couleurSelectionnee"
+            (input)="changerCouleur($any($event.target).value)"
+            style="display:block; margin-top: 8px; width: 60px; height: 36px; border-radius: 8px; border: 1px solid #e5e7eb; cursor: pointer;" />
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+          <label style="font-size: 11px; font-weight: 600; color: #9ca3af; letter-spacing: 0.03em;">FORME DES PARTICULES</label>
+          <div class="forme-grid">
+            @for (forme of themeService.formes; track forme) {
+              <div
+                class="forme-option"
+                [class.selectionnee]="formeSelectionnee === forme"
+                (click)="changerForme(forme)">
+                <div class="forme-apercu" [class]="'forme-' + forme"></div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+
+</div>
+
+</div>

@@ -1,0 +1,146 @@
+<a routerLink="/formations" class="btn-retour">← Retour à la formation</a>
+
+@if (formation) {
+  <div class="cours-hero" [ngStyle]="styleHero()">
+    <div class="hero-inner">
+      <span class="cours-hero-tag">{{ formation.certifiante ? '★ Certifiante' : 'Non certifiante' }}</span>
+      <h1 class="cours-hero-titre">{{ formation.titre }}</h1>
+      <p class="cours-hero-sub">
+        <i class="ti ti-layout-grid"></i>
+        {{ coursListe.length }} module{{ coursListe.length > 1 ? 's' : '' }} disponible{{ coursListe.length > 1 ? 's' : '' }}
+      </p>
+<div class="hero-progress">
+  <div class="progress-track">
+    <div class="progress-fill" [style.width.%]="progressionPourcentage()"></div>
+  </div>
+  <span class="progress-label">{{ progressionLabel() }}</span>
+</div>
+
+    </div>
+  </div>
+
+  <div class="modules-section">
+    @if (formation.descriptif) {
+      <p class="cours-intro" [class.tronque]="!afficherPlusDescriptif">{{ formation.descriptif }}</p>
+      @if (formation.descriptif.length > 160) {
+        <button class="btn-plus" (click)="afficherPlusDescriptif = !afficherPlusDescriptif">
+          {{ afficherPlusDescriptif ? 'Afficher moins' : 'Afficher plus' }}
+        </button>
+      }
+    }
+
+    @if (formation.axes && formation.axes.length > 0) {
+      <div class="points-cles">
+        <p class="points-cles-label">Points clés</p>
+        @for (axe of formation.axes; track axe) {
+          <span class="point-cle"><i class="ti ti-check"></i> {{ axe }}</span>
+        }
+      </div>
+    }
+
+    <p class="modules-label">Modules du cours</p>
+
+    <div class="modules-liste">
+      @for (cours of coursListe; track cours.id; let i = $index) {
+        <div>
+          <div class="module-card ">
+            <div class="module-inner" [class.simple]="!cours.liensYoutube?.length">
+
+              @if (cours.liensYoutube && cours.liensYoutube.length > 0) {
+                <div class="video-banner"  [ngStyle]="styleBanniere()">
+                  @if (!videoEstOuverte(cours.id)) {
+                    <div class="hex-pattern"></div>
+                    <span class="banner-module-tag">Module {{ i + 1 }}</span>
+                    <span class="banner-badge">Prévisualisation</span>
+
+                    <div class="hex-logo">
+                      <svg viewBox="0 0 100 116" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="50,2 96,29 96,87 50,114 4,87 4,29" fill="none" stroke="white" stroke-width="3.5"/>
+                        <circle cx="50" cy="58" r="10" fill="white" opacity="0.95"/>
+                      </svg>
+                    </div>
+
+                    <p class="banner-titre-overlay">{{ cours.titre }}</p>
+                    <button class="video-play-mini" (click)="toggleVideo(cours.id)" aria-label="Lire la vidéo">
+                      <i class="ti ti-player-play-filled"></i>
+                    </button>
+                  } @else {
+                    <div class="video-frame">
+                      <iframe
+                        [src]="getEmbedUrl(cours.liensYoutube[0])"
+                        frameborder="0"
+                        allow="autoplay; encrypted-media; picture-in-picture"
+                        allowfullscreen>
+                      </iframe>
+                    </div>
+                  }
+                </div>
+              }
+
+              <div class="module-content">
+                <span class="module-num">Module {{ i + 1 }}</span>
+                <p class="module-titre">{{ cours.titre }}</p>
+                @if (cours.description) {
+                  <p class="module-desc">{{ cours.description }}</p>
+                }
+
+                <div class="video-reactions">
+                  <button class="reaction-thumb like" [class.actif]="estLike(cours.id)" (click)="toggleLike(cours.id)">
+                    <i class="ti ti-thumb-up"></i> {{ compteurLikes(cours.id) }}
+                  </button>
+                  <button class="reaction-thumb dislike" [class.actif]="estDislike(cours.id)" (click)="toggleDislike(cours.id)">
+                    <i class="ti ti-thumb-down"></i>
+                  </button>
+                  <button class="partage-btn" (click)="partager(cours)" aria-label="Partager">
+                    <i class="ti ti-share"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          @if (cours.nomFichier || cours.nomFichierVideo || (cours.liensGoogle && cours.liensGoogle.length > 0)) {
+            <p class="ressources-titre">Ressources du module</p>
+            <div class="ressources-row">
+              @if (cours.nomFichierVideo) {
+                <div class="pdf-pochette">
+                  <div class="pdf-sheet-mini"></div>
+                  <div class="pdf-texte">
+                    <p class="pdf-titre-mini">Support de la vidéo</p>
+                    <p class="pdf-sub-mini">PDF</p>
+                  </div>
+                  <a [href]="urlTelechargementVideo(cours.id)" class="pdf-download-btn" target="_blank" aria-label="Télécharger">
+                    <i class="ti ti-download"></i>
+                  </a>
+                </div>
+              }
+              @if (cours.nomFichier) {
+                <div class="pdf-pochette">
+                  <div class="pdf-sheet-mini"></div>
+                  <div class="pdf-texte">
+                    <p class="pdf-titre-mini">Support de cours</p>
+                    <p class="pdf-sub-mini">PDF</p>
+                  </div>
+                  <a [href]="urlTelechargement(cours.id)" class="pdf-download-btn" target="_blank" aria-label="Télécharger">
+                    <i class="ti ti-download"></i>
+                  </a>
+                </div>
+              }
+              @for (lien of cours.liensGoogle; track lien) {
+                <a [href]="lien" target="_blank" class="lien-google-card">
+                  <span class="lien-google-icon"><i class="ti ti-brand-google-drive"></i></span>
+                  <span>
+                    <span class="lien-google-label">Ressource complémentaire</span>
+                    <span class="lien-google-sub">Ouvrir dans Drive</span>
+                  </span>
+                </a>
+              }
+            </div>
+          }
+        </div>
+      } @empty {
+        <p class="pas-de-cours">Aucun contenu n'a encore été ajouté pour cette formation.</p>
+      }
+    </div>
+  </div>
+}
