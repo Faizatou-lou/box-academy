@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-
+import { environment } from '../../../environments/environment';
 interface Prospect {
   id: number;
   email: string;
@@ -33,7 +33,7 @@ export class Prospection implements OnInit {
 
   chargerProspects(): void {
     this.chargement = true;
-    this.http.get<Prospect[]>('http://localhost:8080/api/prospects').subscribe({
+    this.http.get<Prospect[]>(`${environment.apiUrl}/api/prospects`).subscribe({
       next: (data) => {
         this.prospects = data.sort((a, b) =>
           new Date(b.dateConsultation).getTime() - new Date(a.dateConsultation).getTime()
@@ -50,7 +50,7 @@ export class Prospection implements OnInit {
   }
 
   marquerContacte(id: number): void {
-    this.http.patch<Prospect>(`http://localhost:8080/api/prospects/${id}/contacte`, {}).subscribe({
+    this.http.patch<Prospect>(`${environment.apiUrl}/api/prospects/${id}/contacte`, {}).subscribe({
       next: () => {
         const p = this.prospects.find(p => p.id === id);
         if (p) p.contacte = true;

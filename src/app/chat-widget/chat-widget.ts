@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer,SafeHtml } from '@angular/platform-browser';
-
+import { environment } from '../../environments/environment';
 interface MessageChat {
   role: 'user' | 'assistant';
   content: string;
@@ -32,8 +32,7 @@ export class ChatWidgetComponent implements AfterViewChecked {
     { role: 'assistant', content: "Bonjour 👋 Je suis l'assistant Box Academy. Pose-moi n'importe quelle question sur nos formations !" }
   ]);
 
-  private readonly urlApi = 'http://localhost:8080/api/chatbot';
-
+  private readonly urlApi = `${environment.apiUrl}/api/chatbot`;
   constructor(private http: HttpClient,private sanitizer:DomSanitizer) {}
 
   ngAfterViewChecked(): void {

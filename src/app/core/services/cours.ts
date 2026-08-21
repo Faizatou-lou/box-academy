@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class CoursService {
 
-  private apiUrl = 'http://localhost:8080/api/cours';
+  private apiUrl = `${environment.apiUrl}/api/cours`;
 
   constructor(private http: HttpClient) {}
 
@@ -77,7 +77,7 @@ export class CoursService {
   }
 
   enregistrerProspect(email: string, formationId: number, titreFormation: string): Observable<any> {
-    return this.http.post(`http://localhost:8080/api/prospects`, {
+    return this.http.post(`${environment.apiUrl}/api/prospects`, {
       email,
       formationId,
       coursConsulte: titreFormation
