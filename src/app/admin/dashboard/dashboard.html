@@ -5,7 +5,31 @@
   </div>
   <div class="header-date">{{ dateAujourdhui }}</div>
 </div>
+@if (alertes.length > 0) {
+  <div class="alertes-section">
+    <div class="alertes-header">
+      <h2>⚠️ Alertes</h2>
+      <span class="alertes-count">{{ alertes.length }} élément{{ alertes.length > 1 ? 's' : '' }} à traiter</span>
+    </div>
 
+    <div class="alertes-liste">
+      @for (alerte of alertesRouges; track alerte.referenceId) {
+        <div class="alerte-carte alerte-rouge" (click)="traiterAlerte(alerte)">
+          <span class="alerte-point"></span>
+          <span class="alerte-message">{{ alerte.message }}</span>
+          <span class="alerte-action">Traiter →</span>
+        </div>
+      }
+      @for (alerte of alertesOranges; track alerte.referenceId) {
+        <div class="alerte-carte alerte-orange" (click)="traiterAlerte(alerte)">
+          <span class="alerte-point"></span>
+          <span class="alerte-message">{{ alerte.message }}</span>
+          <span class="alerte-action">Traiter →</span>
+        </div>
+      }
+    </div>
+  </div>
+}
 <div class="hero-card">
   <div class="hero-glow"></div>
   <div class="hero-top">

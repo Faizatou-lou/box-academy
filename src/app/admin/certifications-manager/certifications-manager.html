@@ -1,0 +1,133 @@
+<div class="page-certifications">
+  <h1>Gestion des certifications</h1>
+  <p class="sous-titre">Envoyez les attestations aux membres après leurs formations</p>
+
+  <div class="barre-actions">
+    <input type="text" [(ngModel)]="recherche" placeholder="Rechercher un membre ou une formation..." class="input-recherche" />
+    <button class="btn-ajouter" (click)="ouvrirFormulaire()">
+      + Envoyer une certification
+    </button>
+  </div>
+
+  <table class="tableau-certifications">
+    <thead>
+      <tr>
+        <th>Membre</th>
+        <th>Email</th>
+        <th>Formation</th>
+        <th>Date d'obtention</th>
+        <th>Fichier</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (cert of certificationsFiltrees(); track cert.id) {
+        <tr>
+          <td>{{ cert.membre?.prenom }} {{ cert.membre?.nom }}</td>
+          <td>{{ cert.membre?.email }}</td>
+          <td>{{ cert.formation?.titre }}</td>
+          <td>{{ cert.dateObtention }}</td>
+          <td>{{ cert.nomFichier }}</td>
+          <td><span class="badge-statut">{{ cert.statut }}</span></td>
+          <td>
+            <button class="btn-supprimer" (click)="supprimer(cert.id)">Supprimer</button>
+          </td>
+        </tr>
+      }
+      @if (certificationsFiltrees().length === 0) {
+        <tr>
+          <td colspan="7" class="ligne-vide">Aucune certification envoyée pour l'instant.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (showFormulaire) {
+    <div class="modal-overlay" (click)="annuler()">
+      <div class="modal-contenu" (click)="$event.stopPropagation()">
+        <h2>Envoyer une certification</h2>
+
+        <div class="toggle-mode">
+          <button type="button" [class.actif]="!modeGeneration" (click)="modeGeneration = false">
+            Uploader un fichier
+          </button>
+          <button type="button" [class.actif]="modeGeneration" (click)="modeGeneration = true">
+            Générer automatiquement
+          </button>
+        </div>
+
+        <div class="form-group">
+          <label>Membre</label>
+          <select [(ngModel)]="formData.membreId">
+            <option value="">Sélectionner un membre...</option>
+            @for (m of membres; track m.id) {
+              <option [value]="m.id">{{ m.prenom }} {{ m.nom }} ({{ m.email }})</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Formation</label>
+          <select [(ngModel)]="formData.formationId">
+            <option value="">Sélectionner une formation...</option>
+            @for (f of formations; track f.id) {
+              <option [value]="f.id">{{ f.titre }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Date d'obtention</label>
+          <input type="date" [(ngModel)]="formData.dateObtention" />
+        </div>
+
+        @if (!modeGeneration) {
+          <div class="form-group">
+            <label>Fichier de l'attestation</label>
+            <input type="file" (change)="onFichierSelectionne($event)" accept=".pdf,.doc,.docx,.jpg,.png" />
+          </div>
+        } @else {
+          <div class="form-group">
+            <label>Civilité</label>
+            <select [(ngModel)]="formData.civilite">
+              <option value="M.">M.</option>
+              <option value="Mme">Mme</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Début de formation</label>
+              <input type="date" [(ngModel)]="formData.dateDebutFormation" />
+            </div>
+            <div class="form-group">
+              <label>Fin de formation</label>
+              <input type="date" [(ngModel)]="formData.dateFinFormation" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Lieu</label>
+            <input type="text" [(ngModel)]="formData.lieu" placeholder="Ex: Guest House" />
+          </div>
+        }
+
+        @if (erreur) {
+          <div class="erreur-message">{{ erreur }}</div>
+        }
+
+        <div class="modal-actions">
+          <button class="btn-annuler" (click)="annuler()">Annuler</button>
+          <button class="btn-envoyer" [disabled]="envoiEnCours" (click)="modeGeneration ? genererAttestation() : envoyer()">
+            @if (envoiEnCours) {
+              Envoi en cours...
+            } @else {
+              Envoyer
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

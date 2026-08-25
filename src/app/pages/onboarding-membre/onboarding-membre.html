@@ -1,0 +1,117 @@
+<div class="onboarding-page">
+
+  <div class="orbe orbe-1"></div>
+  <div class="orbe orbe-2"></div>
+
+  <div class="onboarding-container">
+
+    <div class="progression-etapes">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="point-etape" [class.actif]="i <= etape()"></div>
+      }
+    </div>
+
+    <button class="btn-passer" (click)="passer()">Passer pour l'instant</button>
+
+    @if (etape() === 1) {
+      <div class="etape-contenu">
+        <p class="etape-numero">Étape 1 sur 3</p>
+        <h1>Quel est votre métier actuel ?</h1>
+        <p class="etape-sous-titre">Cela nous aide à personnaliser vos recommandations</p>
+
+        <input
+          type="text"
+          class="input-metier"
+          placeholder="Tapez votre métier..."
+          [value]="metier()"
+          (input)="choisirMetier($any($event.target).value)"
+        />
+
+        <div class="suggestions-grille">
+          @for (m of metiersSuggestions; track m) {
+            <button
+              class="chip-suggestion"
+              [class.selectionne]="metier() === m"
+              (click)="choisirMetier(m)"
+            >
+              {{ m }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (etape() === 2) {
+      <div class="etape-contenu">
+        <p class="etape-numero">Étape 2 sur 3</p>
+        <h1>Dans quel secteur évoluez-vous ?</h1>
+        <p class="etape-sous-titre">Ou dans lequel vous souhaitez évoluer</p>
+
+        <div class="cartes-choix">
+          @for (s of secteurs; track s.valeur) {
+            <button
+              class="carte-choix"
+              [class.selectionne]="secteur() === s.valeur"
+              (click)="choisirSecteur(s.valeur)"
+            >
+              <i class="ti {{ s.icone }}" aria-hidden="true"></i>
+              <span>{{ s.label }}</span>
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (etape() === 3) {
+      <div class="etape-contenu">
+        <p class="etape-numero">Étape 3 sur 3</p>
+        <h1>Quel est votre objectif ?</h1>
+        <p class="etape-sous-titre">On vous proposera des formations adaptées</p>
+
+        <div class="cartes-objectif">
+          @for (o of objectifs; track o.valeur) {
+            <button
+              class="carte-objectif-item"
+              [class.selectionne]="objectif() === o.valeur"
+              (click)="choisirObjectif(o.valeur)"
+            >
+              <div class="carte-objectif-icone">
+                <i class="ti {{ o.icone }}" aria-hidden="true"></i>
+              </div>
+              <div class="carte-objectif-texte">
+                <span class="carte-objectif-titre">{{ o.valeur }}</span>
+                <span class="carte-objectif-desc">{{ o.desc }}</span>
+              </div>
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="navigation-etapes">
+      @if (etape() > 1) {
+        <button class="btn-precedent" (click)="etapePrecedente()">
+          <i class="ti ti-arrow-left" aria-hidden="true"></i>
+          Retour
+        </button>
+      } @else {
+        <div></div>
+      }
+
+      <button
+        class="btn-continuer"
+        [disabled]="!peutContinuer()"
+        (click)="etapeSuivante()"
+      >
+        @if (etape() === totalEtapes) {
+          Accéder à mon espace
+        } @else {
+          Continuer
+        }
+        <i class="ti ti-arrow-right" aria-hidden="true"></i>
+      </button>
+    </div>
+
+  </div>
+
+</div>

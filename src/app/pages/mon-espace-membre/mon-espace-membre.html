@@ -1,0 +1,215 @@
+<div class="espace-page" [style.--couleur-accent]="accentActuel()">
+
+  <div class="orbe orbe-1"></div>
+  <div class="orbe orbe-2"></div>
+  <div class="orbe orbe-3"></div>
+
+  @if (chargement()) {
+    <div class="chargement-ecran">
+      <div class="spinner"></div>
+    </div>
+  } @else if (profil(); as p) {
+
+    <header class="espace-header">
+      <div class="logo-zone">
+        <span class="logo-texte">Box<span class="logo-accent">.academy</span></span>
+      </div>
+      <button class="btn-deconnexion" (click)="deconnexion()">
+        <i class="ti ti-logout" aria-hidden="true"></i>
+        Déconnexion
+      </button>
+    </header>
+
+    <section class="hero-bienvenue">
+      <p class="salutation">{{ salutation() }}</p>
+      <h1 class="nom-membre">{{ p.prenom }}</h1>
+      <p class="sous-texte">Voici où en est votre parcours aujourd'hui</p>
+    </section>
+
+    <section class="grille-principale">
+
+      <div class="carte carte-progression">
+        <div class="anneau-container">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="60" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="10"/>
+            <circle
+              cx="70" cy="70" r="60" fill="none"
+              stroke="url(#gradientAnneau)"
+              stroke-width="10"
+              stroke-linecap="round"
+              transform="rotate(-90 70 70)"
+              [style.strokeDasharray]="377"
+              [style.strokeDashoffset]="377 - (377 * progression() / 100)"
+              class="cercle-progression"
+            />
+            <defs>
+             <linearGradient id="gradientAnneau" x1="0%" y1="0%" x2="100%" y2="100%">
+  <stop offset="0%" [attr.stop-color]="accentActuel()"/>
+  <stop offset="100%" stop-color="#5b8def"/>
+</linearGradient>
+            </defs>
+          </svg>
+          <div class="anneau-texte">
+            <span class="anneau-chiffre">{{ progression() }}%</span>
+            <span class="anneau-label">Profil</span>
+          </div>
+        </div>
+        <p class="carte-titre">Complétez votre profil</p>
+        <p class="carte-desc">Un profil complet nous aide à mieux vous accompagner.</p>
+        <button class="btn-secondaire" (click)="ouvrirEditionProfil()">
+          Modifier mon profil
+        </button>
+      </div>
+
+      <div class="carte carte-stats">
+  <p class="carte-titre">Votre parcours</p>
+  <div class="stats-grille">
+    <div class="stat-item">
+      <span class="stat-chiffre">{{ nombreCertifications() }}</span>
+      <span class="stat-label">Certifications</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-chiffre">0</span>
+      <span class="stat-label">Formations suivies</span>
+    </div>
+  </div>
+
+  @if (certifications().length > 0) {
+    <div class="liste-certifications">
+      @for (cert of certifications(); track cert.id) {
+        <div class="ligne-certification">
+          <div class="cert-icone">
+            <i class="ti ti-certificate" aria-hidden="true"></i>
+          </div>
+          <div class="cert-infos">
+            <p class="cert-titre">{{ cert.formation.titre }}</p>
+            <p class="cert-date">Obtenue le {{ cert.dateObtention }}</p>
+          </div>
+          <button class="cert-telecharger" (click)="telechargerCertification(cert.id)" title="Télécharger">
+            <i class="ti ti-download" aria-hidden="true"></i>
+          </button>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="stat-placeholder">
+      <i class="ti ti-certificate" aria-hidden="true"></i>
+      <p>Vos certifications apparaîtront ici une fois vos formations terminées.</p>
+    </div>
+  }
+</div>
+
+      <div class="carte carte-objectif">
+  <p class="carte-titre">Votre objectif</p>
+  @if (p.objectif) {
+    <div class="objectif-badge">
+      <i class="ti ti-target-arrow" aria-hidden="true"></i>
+      {{ p.objectif }}
+    </div>
+    <p class="carte-desc">
+      @if (p.secteur) {
+        Secteur : {{ p.secteur }}
+      }
+    </p>
+  } @else {
+    <p class="carte-desc">Définissez votre objectif pour recevoir des recommandations personnalisées.</p>
+    <button class="btn-primaire" (click)="ouvrirEditionProfil()">
+      Définir mon objectif
+      <i class="ti ti-arrow-right" aria-hidden="true"></i>
+    </button>
+  }
+</div>
+
+    </section>
+
+    @if (recommandations().length > 0) {
+  <section class="section-recommandations">
+    <div class="recommandations-header">
+      <p class="section-titre">Recommandé pour vous</p>
+      <p class="section-sous-titre">Basé sur votre profil et vos objectifs</p>
+    </div>
+
+    <div class="groupes-recommandations">
+      @for (groupe of recommandationsGroupees(); track groupe.categorieNom) {
+        <div class="groupe-recommandation">
+          <div class="groupe-header">
+            <div class="groupe-badge-categorie">{{ groupe.categorieNom }}</div>
+            <div class="groupe-explication">
+              <i class="ti ti-bulb" aria-hidden="true"></i>
+              <p>{{ groupe.explication }}</p>
+            </div>
+          </div>
+
+          <div class="formations-mini-grille">
+            @for (f of groupe.formations; track f.formationId) {
+              <a routerLink="/formation-detail/{{ f.formationId }}" class="mini-carte-formation">
+                <h4>{{ f.titre }}</h4>
+                <p>{{ f.descriptif }}</p>
+                <span class="mini-lien">
+                  Voir <i class="ti ti-arrow-right" aria-hidden="true"></i>
+                </span>
+              </a>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+}
+
+  }
+
+  @if (modeEditionProfil()) {
+    <div class="modal-overlay" (click)="fermerEditionProfil()">
+      <div class="modal-contenu" (click)="$event.stopPropagation()">
+        <h2>Mon profil</h2>
+        <p class="modal-sous-titre">Ces informations nous aident à personnaliser votre expérience</p>
+
+        <div class="form-group">
+          <label>Métier</label>
+          <input type="text" [(ngModel)]="editData.metier" placeholder="Ex: Comptable, Développeur..." />
+        </div>
+
+        <div class="form-group">
+          <label>Secteur d'activité</label>
+          <select [(ngModel)]="editData.secteur">
+            <option value="">Sélectionner...</option>
+            @for (s of secteurs; track s) {
+              <option [value]="s">{{ s }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Objectif</label>
+          <select [(ngModel)]="editData.objectif">
+            <option value="">Sélectionner...</option>
+            @for (o of objectifs; track o) {
+              <option [value]="o">{{ o }}</option>
+            }
+          </select>
+        </div>
+<div class="form-group">
+  <label>Couleur d'accent</label>
+  <div class="palette-couleurs">
+    @for (c of couleursDisponibles; track c.valeur) {
+      <button
+        type="button"
+        class="pastille-couleur"
+        [class.selectionnee]="editData.couleurAccent === c.valeur"
+        [style.background]="c.valeur"
+        (click)="choisirCouleur(c.valeur)"
+        [title]="c.nom"
+      ></button>
+    }
+  </div>
+</div>
+        <div class="modal-actions">
+          <button class="btn-secondaire" (click)="fermerEditionProfil()">Annuler</button>
+          <button class="btn-primaire" (click)="enregistrerProfil()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

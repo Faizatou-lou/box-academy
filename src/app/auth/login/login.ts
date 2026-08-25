@@ -39,18 +39,11 @@ export class Login {
     this.erreur = '';
     this.chargement = true;
 
-
- console.log('🔵 Tentative connexion:', this.formData.email);
-
-
-
-    // Appel au backend Spring Boot
     this.authService.seConnecter(this.formData.email, this.formData.motDePasse).subscribe({
-      next: (data) => {
+      next: () => {
         this.chargement = false;
-        // Sauvegarder les infos admin
-        this.authService.sauvegarderSession(data);
-        // Aller vers la page OTP
+        sessionStorage.setItem('otp_email', this.formData.email);
+        sessionStorage.setItem('otp_motDePasse', this.formData.motDePasse);
         this.router.navigate(['/otp-verify']);
       },
       error: (err) => {

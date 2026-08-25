@@ -4,10 +4,11 @@ import { Navbar } from './shared/navbar/navbar';
 import { Footer } from './shared/footer/footer';
 import { Loading } from './shared/loading/loading';
 import { ChatWidgetComponent } from './chat-widget/chat-widget';
+import { ScrollTop } from './shared/scroll-top/scroll-top';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, Navbar, Footer, Loading,ChatWidgetComponent],
+  imports: [RouterOutlet, Navbar, Footer, Loading,ChatWidgetComponent,ScrollTop],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -58,8 +59,12 @@ export class App implements OnInit {
   }
 
   isAdminOrAuth(): boolean {
-    return this.currentUrl.startsWith('/admin') ||
-           this.currentUrl === '/login' ||
-           this.currentUrl === '/otp-verify';
-  }
+  return this.currentUrl.startsWith('/admin') ||
+         this.currentUrl === '/login' ||
+         this.currentUrl === '/otp-verify' ||
+         this.currentUrl === '/connexion' ||
+         this.currentUrl === '/creer-compte' ||
+         this.currentUrl === '/onboarding' ||
+         this.currentUrl === '/mon-espace';
+}
 }

@@ -217,6 +217,7 @@
     </div>
   </div>
 </section>
+
 <!-- ============ CATEGORIES ============ -->
 <section class="categories-section">
   <span class="section-eyebrow">Domaines</span>
@@ -275,3 +276,71 @@
   <p>Inscrivez-vous dès aujourd'hui et rejoignez nos apprenants.</p>
   <a routerLink="/formations" class="btn-white">Commencer maintenant</a>
 </section>
+
+<!-- ============ ONGLET À PROPOS ============ -->
+<div
+  class="about-tab"
+  [class.hidden]="bubbleVisible"
+  [style.top.px]="tabTop"
+  (click)="onTabClick()"
+  role="button"
+  tabindex="0"
+  (keyup.enter)="onTabClick()"
+  aria-label="En savoir plus sur Box Academy">
+  À propos de nous
+</div>
+
+<div
+  class="about-bubble"
+  *ngIf="bubbleVisible && !isPopping"
+  [style.top.px]="tabTop"
+  (click)="onBubbleClick()"
+  role="button"
+  tabindex="0"
+  (keyup.enter)="onBubbleClick()"
+  aria-label="Découvrir Box Academy">
+  À propos<br>de nous
+</div>
+
+<div class="bubble-particles" *ngIf="isPopping && !showAboutModal" [style.top.px]="tabTop">
+  @for (p of particles; track p.id) {
+    <span class="particle"
+      [style.--x]="p.x + 'px'" [style.--y]="p.y + 'px'"
+      [style.animation-delay]="p.delay + 's'"></span>
+  }
+</div>
+
+<div class="about-modal-overlay" *ngIf="showAboutModal" (click)="closeAboutModal()">
+  <div class="about-modal" (click)="$event.stopPropagation()">
+    <div class="about-modal-header">
+      <button class="about-modal-close" (click)="closeAboutModal()" aria-label="Fermer">
+        <i class="ti ti-x"></i>
+      </button>
+      <div class="about-modal-icon"><i class="ti ti-sparkles"></i></div>
+      <span class="section-eyebrow">Box Academy</span>
+      <h2>Votre avenir commence ici ✨</h2>
+    </div>
+    <div class="about-modal-body">
+      <div class="about-modal-text">
+        <p>Rejoignez une communauté ambitieuse : compétences concrètes, certifications reconnues, formateurs qui croient en vous.</p>
+      </div>
+      <div class="about-modal-stats">
+        <div><strong>+{{ statFormations }}</strong><span>Formations</span></div>
+        <div><strong>+{{ statApprenants }}</strong><span>Apprenants</span></div>
+        <div><strong>{{ statSatisfaction }}%</strong><span>Satisfaction</span></div>
+      </div>
+      <a routerLink="/formations" class="about-modal-cta" (click)="closeAboutModal()">
+        Je m'inscris à une formation <i class="ti ti-arrow-right"></i>
+      </a>
+      <div class="about-modal-social">
+        <span>Suivez-nous</span>
+        <a href="https://wa.me/22657405930" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <i class="ti ti-brand-whatsapp"></i>
+        </a>
+        <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <i class="ti ti-brand-linkedin"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

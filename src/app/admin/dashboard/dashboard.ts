@@ -4,6 +4,8 @@ import { FormationService } from '../../core/services/formation';
 import { InscriptionService } from '../../core/services/inscription';
 import { AuthService } from '../../core/services/auth';
 import { Chart, registerables } from 'chart.js';
+import { AlerteService, AlerteData } from '../../core/services/alerte';
+
 
 Chart.register(...registerables);
 
@@ -23,6 +25,7 @@ export class Dashboard implements OnInit, AfterViewInit {
   inscriptions: any[] = [];
   dernieresInscriptions: any[] = [];
   dernieresFormations:any[]= [];
+  alertes: AlerteData[] = [];
 
   dateAujourdhui = new Date().toLocaleDateString('fr-FR', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
@@ -42,10 +45,19 @@ export class Dashboard implements OnInit, AfterViewInit {
     private formationService: FormationService,
     private inscriptionService: InscriptionService,
     private authService: AuthService,
+    private alerteService: AlerteService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    this.alerteService.getAlertes().subscribe({
+      next: (data) => {
+      this.alertes = data;
+      this.cdr.detectChanges();
+    },
+    error: (err) => console.error("Erreur alertes :", err)
+    });
+
     this.formationService.getFormations().subscribe({
       next: (data) => {
         this.formations = data;
@@ -297,6 +309,20 @@ export class Dashboard implements OnInit, AfterViewInit {
       }
     });
   }
+traiterAlerte(alerte: AlerteData): void {
+  if (alerte.type === 'inscription') {
+    this.router.navigate(['/admin/inscriptions']);
+  } else if (alerte.type === 'formation') {
+    this.router.navigate(['/admin/formations']);
+  }
+}
 
+get alertesRouges() {
+  return this.alertes.filter(a => a.urgence === 'rouge');
+}
+
+get alertesOranges() {
+  return this.alertes.filter(a => a.urgence === 'orange');
+}
 
 }

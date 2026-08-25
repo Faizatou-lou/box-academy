@@ -14,6 +14,13 @@ import { Contact } from './pages/contact/contact';
 import { AdminLayout } from './admin/shared/admin-layout/admin-layout';
 import { Prospection } from './admin/prospection/prospection';
 import { CoursFormations } from './pages/cours-formations/cours-formations';
+import { ConnexionMembre } from './pages/connexion-membre/connexion-membre';
+import { CreerCompteMembre } from './pages/creer-compte-membre/creer-compte-membre';
+import { MonEspaceMembre } from './pages/mon-espace-membre/mon-espace-membre';
+import { OnboardingMembre } from './pages/onboarding-membre/onboarding-membre';
+import { CertificationsManager } from './admin/certifications-manager/certifications-manager';
+import { RecommandationsManager } from './admin/recommandations-manager/recommandations-manager';
+
 
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
@@ -24,7 +31,10 @@ export const routes: Routes = [
   { path: 'contact', component: Contact },
   { path: 'login', component: Login },
   { path: 'otp-verify', component: OtpVerify },
- 
+  { path: 'connexion', component: ConnexionMembre },
+{ path: 'creer-compte', component: CreerCompteMembre },
+{ path: 'mon-espace', component: MonEspaceMembre },
+{ path: 'onboarding', component: OnboardingMembre },
 
   {
     path: 'admin',
@@ -34,8 +44,11 @@ export const routes: Routes = [
       { path: 'formations', component: FormationsManager },
       { path: 'cours', component: CoursManager },
       { path: 'inscriptions', component: InscriptionsManager },
+      { path: 'certifications', component: CertificationsManager },
       { path: 'profil', component: Profil },
-      {path:'prospection',component: Prospection}
+      {path:'prospection',component: Prospection},
+      { path: 'recommandations', component: RecommandationsManager },
+
     ]
   },
 

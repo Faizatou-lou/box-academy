@@ -23,13 +23,11 @@ export class AuthService {
     });
   }
 
-  // OTP reste local pour l'instant
-  validerOtp(otp: string): boolean {
-    if (otp === '123456') {
-      localStorage.setItem('otpValidated', 'true');
-      return true;
-    }
-    return false;
+  verifierOtp(email: string, code: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/verify-otp`, {
+      email: email,
+      code: code
+    });
   }
 
   // Sauvegarder les infos admin après connexion
@@ -52,12 +50,11 @@ export class AuthService {
   }
 
   estConnecte(): boolean {
-    return localStorage.getItem('otpValidated') === 'true';
+    return localStorage.getItem('isAuthenticated') === 'true';
   }
 
   seDeconnecter() {
     localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('otpValidated');
     localStorage.removeItem('adminId');
     localStorage.removeItem('adminNom');
     localStorage.removeItem('adminPrenom');

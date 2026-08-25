@@ -3,6 +3,7 @@
    <app-navbar></app-navbar>
 }
 
+
 <div class="content">
   <router-outlet></router-outlet>
 </div>
@@ -10,4 +11,9 @@
 @if (!isAdminOrAuth()) {
   <app-footer></app-footer>
 }
+
 <app-chat-widget></app-chat-widget>
+
+@if (!isAdminOrAuth()) {
+  <app-scroll-top></app-scroll-top>
+}

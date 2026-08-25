@@ -21,8 +21,10 @@
   <a href="#" target="_blank" rel="noopener noreferrer" aria-label="MLinkedIn">
     <i class="ti ti-brand-linkedin" aria-hidden="true"></i>LinkedIn
   </a>
+</li>
+<li><a routerLink="/connexion" routerLinkActive="active" class="navbar-connexion">Se connecter</a></li>
 </ul>
- <a routerLink="/inscription" class="navbar-cta">S'inscrire</a>
+ <a routerLink="/creer-compte" class="navbar-cta">S'inscrire</a>
 
  <div class="navbar-menu-icon" (click)="toggleMenu()">
     <span></span>
@@ -40,6 +42,8 @@
 </li>
    <!-- <li><a routerLink="/about-us" (click)="toggleMenu()">À propos De Nous</a></li>-->
     <li><a routerLink="/contact" (click)="toggleMenu()">Contact</a></li>
+    <li><a routerLink="/connexion" (click)="toggleMenu()">Se connecter</a></li>
+    <li><a routerLink="/creer-compte" (click)="toggleMenu()">S'inscrire</a></li>
   </ul>
 
 </nav>

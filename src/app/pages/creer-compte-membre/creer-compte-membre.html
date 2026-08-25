@@ -1,0 +1,60 @@
+
+<div class="creer-compte-page">
+  <div class="flip-stage">
+    <div class="flip-back">
+      <div class="flip-back-content">
+        <i class="ti ti-sparkles" aria-hidden="true"></i>
+        <p>Préparation de votre espace...</p>
+      </div>
+    </div>
+
+    <div class="creer-compte-card flip-top" [class.folding]="enTransition()">
+      <h1>Créer un compte</h1>
+      <p class="sous-titre">Rejoignez la communauté Box Academy</p>
+
+      <form (ngSubmit)="creerCompte()" autocomplete="off">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" [(ngModel)]="formData.nom" name="nom" placeholder="Votre nom" required autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input type="text" id="prenom" [(ngModel)]="formData.prenom" name="prenom" placeholder="Votre prénom" required autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" [(ngModel)]="formData.email" name="email" placeholder="votre@email.com" required autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label for="telephone">Téléphone (optionnel)</label>
+          <input type="tel" id="telephone" [(ngModel)]="formData.telephone" name="telephone" placeholder="+226 XX XX XX XX"  autocomplete="off"/>
+        </div>
+
+        <div class="form-group">
+          <label for="motDePasse">Mot de passe</label>
+          <input type="password" id="motDePasse" [(ngModel)]="formData.motDePasse" name="motDePasse" placeholder="6 caractères minimum" required autocomplete="new-password"/>
+        </div>
+
+        @if (erreur()) {
+          <div class="erreur-message">{{ erreur() }}</div>
+        }
+
+        <button type="submit" [disabled]="chargement()">
+          @if (chargement()) {
+            Création en cours...
+          } @else {
+            Créer mon compte
+          }
+        </button>
+      </form>
+
+      <p class="lien-connexion">
+        Déjà un compte ? <a routerLink="/connexion">Se connecter</a>
+      </p>
+    </div>
+  </div>
+</div>

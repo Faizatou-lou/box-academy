@@ -105,6 +105,14 @@
   color: #ffffff;
   transform: translateY(-2px);
 }
+
+/* --- Lien Se connecter --- */
+.navbar-connexion {
+  padding-left: 1.5rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.35);
+  font-weight: 500;
+}
+
 /* --- Bouton CTA --- */
 .navbar-cta {
   display: inline-flex;

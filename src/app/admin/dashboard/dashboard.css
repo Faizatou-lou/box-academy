@@ -3,7 +3,102 @@
   grid-template-columns: 260px 1fr;
   min-height: 100vh;
 }
+.alertes-section {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
 
+.alertes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.alertes-header h2 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.alertes-count {
+  font-size: 12px;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 4px 12px;
+  border-radius: 50px;
+}
+
+.alertes-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.alerte-carte {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.alerte-carte:hover {
+  transform: translateX(4px);
+}
+
+.alerte-rouge {
+  background: #fef2f2;
+  border-left: 3px solid #dc2626;
+}
+
+.alerte-orange {
+  background: #fffbeb;
+  border-left: 3px solid #d97706;
+}
+
+.alerte-point {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.alerte-rouge .alerte-point {
+  background: #dc2626;
+}
+
+.alerte-orange .alerte-point {
+  background: #d97706;
+}
+
+.alerte-message {
+  flex: 1;
+  font-size: 13px;
+  color: #374151;
+}
+
+.alerte-action {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.alerte-rouge .alerte-action {
+  color: #dc2626;
+}
+
+.alerte-orange .alerte-action {
+  color: #d97706;
+}
 .sidebar {
   background-color: var(--primary-color);
   color: #ffffff;

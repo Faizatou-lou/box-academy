@@ -1,0 +1,99 @@
+<div class="page-recommandations">
+  <h1>Gestion des recommandations</h1>
+  <p class="sous-titre">Définissez les correspondances secteur/objectif → catégorie de formation</p>
+
+  <button class="btn-ajouter" (click)="ouvrirFormulaire()">
+    + Ajouter une recommandation
+  </button>
+
+  <table class="tableau">
+    <thead>
+      <tr>
+        <th>Secteur</th>
+        <th>Objectif</th>
+        <th>Catégorie</th>
+        <th>Poids</th>
+        <th>Explication</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (r of recommandations; track r.id) {
+        <tr>
+          <td>{{ r.secteur }}</td>
+          <td>{{ r.objectif }}</td>
+          <td>{{ r.categorie?.nom }}</td>
+          <td>{{ r.poids }}</td>
+          <td class="explication-cell">{{ r.explication }}</td>
+          <td>
+            <button class="btn-supprimer" (click)="supprimer(r.id)">Supprimer</button>
+          </td>
+        </tr>
+      }
+      @if (recommandations.length === 0) {
+        <tr>
+          <td colspan="6" class="ligne-vide">Aucune recommandation créée pour l'instant.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (showFormulaire) {
+    <div class="modal-overlay" (click)="annuler()">
+      <div class="modal-contenu" (click)="$event.stopPropagation()">
+        <h2>Nouvelle recommandation</h2>
+
+        <div class="form-group">
+          <label>Secteur</label>
+          <select [(ngModel)]="formData.secteur">
+            <option value="">Sélectionner...</option>
+            @for (s of secteurs; track s) {
+              <option [value]="s">{{ s }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Objectif</label>
+          <select [(ngModel)]="formData.objectif">
+            <option value="">Sélectionner...</option>
+            @for (o of objectifs; track o) {
+              <option [value]="o">{{ o }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Catégorie de formation</label>
+          <select [(ngModel)]="formData.categorieId">
+            <option value="">Sélectionner...</option>
+            @for (c of categories; track c.id) {
+              <option [value]="c.id">{{ c.nom }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Poids (1 à 3, 3 = fortement recommandé)</label>
+          <input type="number" min="1" max="3" [(ngModel)]="formData.poids" />
+        </div>
+
+        <div class="form-group">
+          <label>Explication (affichée au membre)</label>
+          <textarea [(ngModel)]="formData.explication" rows="3" placeholder="Ex: La bureautique vous aide à..."></textarea>
+        </div>
+
+        @if (erreur) {
+          <div class="erreur-message">{{ erreur }}</div>
+        }
+
+        <div class="modal-actions">
+          <button class="btn-annuler" (click)="annuler()">Annuler</button>
+          <button class="btn-envoyer" [disabled]="envoiEnCours" (click)="enregistrer()">
+            @if (envoiEnCours) { Enregistrement... } @else { Enregistrer }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

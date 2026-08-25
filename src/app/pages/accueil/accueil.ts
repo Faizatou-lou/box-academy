@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, NgZone, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormationService } from '../../core/services/formation';
@@ -11,7 +11,6 @@ interface HeroSlide {
   sousTitre: string;
   image: string;
 }
-
 
 interface ColonneFormations {
   titre: string;
@@ -58,73 +57,74 @@ export class AccueilComponent implements OnInit, OnDestroy, AfterViewInit {
   categories: Categorie[] = [];
 
   // ===== PARTENAIRES (vrais partenaires Box Academy, répartis en 2 rangées pour le défilement) =====
- partenairesTous = [
-  { nom: 'CAMEG', fichier: 'cameg.png' },
-  { nom: 'ONEA', fichier: 'onea.png' },
-  { nom: 'SONABEL', fichier: 'sonabel.png' },
-  { nom: 'SOFITEX', fichier: 'sofitex.png' },
-  { nom: 'CRRAE-UMOA', fichier: 'crrae.png' },
-  { nom: 'PETROCI', fichier: 'petroci.png' },
-  { nom: 'OMA', fichier: 'oma.png' },
-  { nom: 'SOCIETE GENERALE', fichier: 'societe-generale.png' },
-  { nom: 'BDM SA', fichier: 'bdm-sa.png' },
-  { nom: 'BDU-CI', fichier: 'bdu-ci.png' },
-  { nom: 'BDU-BF', fichier: 'bdu-bf.png' },
-  { nom: 'BRIDGE BANK GROUP', fichier: 'bridge-bank.png' },
-  { nom: 'NSIA', fichier: 'nsia.png' },
-  { nom: 'ECOBANK', fichier: 'ecobank.png' },
-  { nom: 'BPBF', fichier: 'bpbf.png' },
-  { nom: 'AFTRANS', fichier: 'aftrans.png' },
-  { nom: 'BMS-CI', fichier: 'bms-ci.png' },
-  { nom: 'FINACOM', fichier: 'finacom.png' },
-  { nom: 'GLOBUS-RE', fichier: 'globus.png' },
-  { nom: 'SUNU', fichier: 'sunu.png' },
-  { nom: 'SANLAM', fichier: 'salam.png' },
-  { nom: 'CORIS INVEST GROUP', fichier: 'coris-invest.png' },
-  { nom: 'CORIS HOLDING', fichier: 'coris-holding.png' },
-  { nom: 'ACEP', fichier: 'acep.png' },
-  { nom: 'BHN', fichier: 'bn.png' },
-  { nom: 'BNI', fichier: 'bni.png' },
-  { nom: 'IB BANK', fichier: 'ibbank.png' },
-  { nom: 'BADF', fichier: 'badf.png' },
-  { nom: 'CAIDP', fichier: 'caidp.png' },
-  { nom: 'NOUVELLE FSPCI', fichier: 'psp-ci.png' },
-  { nom: 'CIMAF', fichier: 'cimaf.png' },
-  { nom: 'ANEC', fichier: 'anec.png' },
-  { nom: 'FIDRA', fichier: 'fidra.png' },
-  { nom: 'SNEDAI', fichier: 'snedai.png' },
-  { nom: 'ENVOL TECHNOLOGIES', fichier: 'envol.png' },
-  { nom: 'SODIBO', fichier: 'sodibo.png' },
-  { nom: 'ORANGE', fichier: 'orange.png' },
-  { nom: 'MOOV AFRICA', fichier: 'moov.png' }
-];
+  partenairesTous = [
+    { nom: 'CAMEG', fichier: 'cameg.png' },
+    { nom: 'ONEA', fichier: 'onea.png' },
+    { nom: 'SONABEL', fichier: 'sonabel.png' },
+    { nom: 'SOFITEX', fichier: 'sofitex.png' },
+    { nom: 'CRRAE-UMOA', fichier: 'crrae.png' },
+    { nom: 'PETROCI', fichier: 'petroci.png' },
+    { nom: 'OMA', fichier: 'oma.png' },
+    { nom: 'SOCIETE GENERALE', fichier: 'societe-generale.png' },
+    { nom: 'BDM SA', fichier: 'bdm-sa.png' },
+    { nom: 'BDU-CI', fichier: 'bdu-ci.png' },
+    { nom: 'BDU-BF', fichier: 'bdu-bf.png' },
+    { nom: 'BRIDGE BANK GROUP', fichier: 'bridge-bank.png' },
+    { nom: 'NSIA', fichier: 'nsia.png' },
+    { nom: 'ECOBANK', fichier: 'ecobank.png' },
+    { nom: 'BPBF', fichier: 'bpbf.png' },
+    { nom: 'AFTRANS', fichier: 'aftrans.png' },
+    { nom: 'BMS-CI', fichier: 'bms-ci.png' },
+    { nom: 'FINACOM', fichier: 'finacom.png' },
+    { nom: 'GLOBUS-RE', fichier: 'globus.png' },
+    { nom: 'SUNU', fichier: 'sunu.png' },
+    { nom: 'SANLAM', fichier: 'salam.png' },
+    { nom: 'CORIS INVEST GROUP', fichier: 'coris-invest.png' },
+    { nom: 'CORIS HOLDING', fichier: 'coris-holding.png' },
+    { nom: 'ACEP', fichier: 'acep.png' },
+    { nom: 'BHN', fichier: 'bn.png' },
+    { nom: 'BNI', fichier: 'bni.png' },
+    { nom: 'IB BANK', fichier: 'ibbank.png' },
+    { nom: 'BADF', fichier: 'badf.png' },
+    { nom: 'CAIDP', fichier: 'caidp.png' },
+    { nom: 'NOUVELLE FSPCI', fichier: 'psp-ci.png' },
+    { nom: 'CIMAF', fichier: 'cimaf.png' },
+    { nom: 'ANEC', fichier: 'anec.png' },
+    { nom: 'FIDRA', fichier: 'fidra.png' },
+    { nom: 'SNEDAI', fichier: 'snedai.png' },
+    { nom: 'ENVOL TECHNOLOGIES', fichier: 'envol.png' },
+    { nom: 'SODIBO', fichier: 'sodibo.png' },
+    { nom: 'ORANGE', fichier: 'orange.png' },
+    { nom: 'MOOV AFRICA', fichier: 'moov.png' }
+  ];
 
-afficherTousPartenaires = false;
-private readonly NB_PARTENAIRES_APERCU = 11;
+  afficherTousPartenaires = false;
+  private readonly NB_PARTENAIRES_APERCU = 11;
 
-get partenairesLigne1() {
-  const milieu = Math.ceil(this.partenairesTous.length / 2);
-  return this.partenairesTous.slice(0, milieu);
-}
+  get partenairesLigne1() {
+    const milieu = Math.ceil(this.partenairesTous.length / 2);
+    return this.partenairesTous.slice(0, milieu);
+  }
 
-get partenairesLigne2() {
-  const milieu = Math.ceil(this.partenairesTous.length / 2);
-  return this.partenairesTous.slice(milieu);
-}
+  get partenairesLigne2() {
+    const milieu = Math.ceil(this.partenairesTous.length / 2);
+    return this.partenairesTous.slice(milieu);
+  }
 
-get partenairesAffiches() {
-  return this.afficherTousPartenaires
-    ? this.partenairesTous
-    : this.partenairesTous.slice(0, this.NB_PARTENAIRES_APERCU);
-}
+  get partenairesAffiches() {
+    return this.afficherTousPartenaires
+      ? this.partenairesTous
+      : this.partenairesTous.slice(0, this.NB_PARTENAIRES_APERCU);
+  }
 
-get nbPartenairesRestants(): number {
-  return this.partenairesTous.length - this.NB_PARTENAIRES_APERCU;
-}
+  get nbPartenairesRestants(): number {
+    return this.partenairesTous.length - this.NB_PARTENAIRES_APERCU;
+  }
 
-toggleTousPartenaires(): void {
-  this.afficherTousPartenaires = !this.afficherTousPartenaires;
-}
+  toggleTousPartenaires(): void {
+    this.afficherTousPartenaires = !this.afficherTousPartenaires;
+  }
+
   // Stats
   statFormations = 0;
   statApprenants = 0;
@@ -132,6 +132,16 @@ toggleTousPartenaires(): void {
   statSatisfaction = 0;
 
   erreursLogo = new Set<number>();
+
+  // ===== ONGLET / BULLE À PROPOS =====
+  tabTop = 140;
+  bubbleVisible = false;
+  isPopping = false;
+  showAboutModal = false;
+  particles: { id: number; x: number; y: number; delay: number }[] = [];
+  private readonly TAB_TOP_MARGIN = 140;
+  private readonly TAB_BOTTOM_MARGIN = 180;
+  private scrollTicking = false;
 
   constructor(
     private formationService: FormationService,
@@ -144,9 +154,15 @@ toggleTousPartenaires(): void {
     this.categorieService.getCategories().subscribe({
       next: (data) => {
         this.categories = data;
+        console.log('CATEGORIES REÇUES:', data);
         this.cdr.detectChanges();
+        setTimeout(() => {
+          const elements = document.querySelectorAll('.cat-card');
+          console.log('ELEMENTS .cat-card TROUVÉS:', elements.length);
+          this.observeElements('.cat-card', 80);
+        }, 100);
       },
-      error: (error) => console.error('Erreur lors du chargement des catégories :', error)
+      error: (error) => console.error('Erreur lors du chargement des categories :', error)
     });
 
     this.formationService.getFormations().subscribe(data => {
@@ -342,5 +358,50 @@ toggleTousPartenaires(): void {
     if (mots.length === 0) return '?';
     if (mots.length === 1) return mots[0].substring(0, 2).toUpperCase();
     return (mots[0][0] + mots[1][0]).toUpperCase();
+  }
+
+  // ===== ONGLET / BULLE À PROPOS =====
+  @HostListener('window:scroll')
+  onWindowScroll(): void {
+    if (this.scrollTicking) return;
+    this.scrollTicking = true;
+    requestAnimationFrame(() => {
+      this.updateTabPosition();
+      this.scrollTicking = false;
+    });
+  }
+
+  private updateTabPosition(): void {
+    const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
+    const trackHeight = window.innerHeight - this.TAB_TOP_MARGIN - this.TAB_BOTTOM_MARGIN;
+    this.tabTop = this.TAB_TOP_MARGIN + progress * trackHeight;
+  }
+
+  onTabClick(): void {
+    this.bubbleVisible = true;
+  }
+
+  onBubbleClick(): void {
+    if (this.isPopping) return;
+    this.isPopping = true;
+    this.particles = Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      x: (Math.random() - 0.5) * 250,
+      y: (Math.random() - 0.5) * 250,
+      delay: Math.random() * 0.1
+    }));
+    setTimeout(() => {
+      this.showAboutModal = true;
+      this.cdr.detectChanges();
+    }, 420);
+  }
+
+  closeAboutModal(): void {
+    this.showAboutModal = false;
+    this.isPopping = false;
+    this.bubbleVisible = false;
+    this.particles = [];
+    this.cdr.detectChanges();
   }
 }
