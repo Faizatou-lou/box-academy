@@ -5,6 +5,9 @@ import { FormationService } from '../../core/services/formation';
 import { CategorieService } from '../../core/services/categorie';
 import { Categorie } from '../../core/models/categorie.model';
 import { CategoryIcon } from '../../shared/category-icon/category-icon';
+import { AvisService, AvisData } from '../../core/services/avis';
+import { FormsModule } from '@angular/forms';
+
 
 interface HeroSlide {
   titre: string;
@@ -20,7 +23,7 @@ interface ColonneFormations {
 @Component({
   selector: 'app-accueil',
   standalone: true,
-  imports: [RouterLink, CommonModule, CategoryIcon],
+  imports: [RouterLink, CommonModule, CategoryIcon,FormsModule],
   templateUrl: './accueil.html',
   styleUrl: './accueil.css'
 })
@@ -132,7 +135,18 @@ export class AccueilComponent implements OnInit, OnDestroy, AfterViewInit {
   statSatisfaction = 0;
 
   erreursLogo = new Set<number>();
+avisListe: AvisData[] = [];
+showFormulaireAvis = false;
+avisEnvoiEnCours = false;
+avisErreur = '';
+avisSucces = false;
 
+avisFormData = {
+  nom: '',
+  email: '',
+  note: 5,
+  commentaire: ''
+};
   // ===== ONGLET / BULLE À PROPOS =====
   tabTop = 140;
   bubbleVisible = false;
@@ -143,14 +157,23 @@ export class AccueilComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly TAB_BOTTOM_MARGIN = 180;
   private scrollTicking = false;
 
-  constructor(
-    private formationService: FormationService,
-    private categorieService: CategorieService,
-    private cdr: ChangeDetectorRef,
-    private ngZone: NgZone
-  ) {}
+ constructor(
+  private formationService: FormationService,
+  private categorieService: CategorieService,
+  private avisService: AvisService,
+  private cdr: ChangeDetectorRef,
+  private ngZone: NgZone
+) {}
 
   ngOnInit(): void {
+
+    this.avisService.getPublies().subscribe({
+  next: (data) => {
+    this.avisListe = data;
+    this.cdr.detectChanges();
+  },
+  error: (err) => console.error('Erreur avis :', err)
+});
     this.categorieService.getCategories().subscribe({
       next: (data) => {
         this.categories = data;
@@ -404,4 +427,35 @@ export class AccueilComponent implements OnInit, OnDestroy, AfterViewInit {
     this.particles = [];
     this.cdr.detectChanges();
   }
+ouvrirFormulaireAvis(): void {
+  this.showFormulaireAvis = true;
+  this.avisSucces = false;
+  this.avisErreur = '';
+  this.avisFormData = { nom: '', email: '', note: 5, commentaire: '' };
+}
+
+fermerFormulaireAvis(): void {
+  this.showFormulaireAvis = false;
+}
+
+choisirNote(note: number): void {
+  this.avisFormData.note = note;
+}
+envoyerAvis(): void {
+  this.avisEnvoiEnCours = true;
+
+  this.avisService.creer(this.avisFormData).subscribe({
+    next: () => {
+      this.avisEnvoiEnCours = false;
+      this.avisSucces = true;
+      this.avisFormData = { nom: '', email: '', note: 5, commentaire: '' };
+    },
+    error: (err) => {
+      this.avisEnvoiEnCours = false;
+      this.avisErreur = err.error?.message || 'Une erreur est survenue.';
+    }
+  });
+}
+
+
 }

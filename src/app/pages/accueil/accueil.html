@@ -270,6 +270,91 @@
   </div>
 </section>
 
+<!-- ============ AVIS ============ -->
+<section class="avis-section">
+  <div class="section-head">
+    <div>
+      <span class="section-eyebrow">Témoignages</span>
+      <h2 class="section-title">Ce que disent nos apprenants</h2>
+      <p class="section-sub">Des retours authentiques de la communauté Box Academy.</p>
+    </div>
+    <button class="btn-avis" (click)="ouvrirFormulaireAvis()">Laisser un avis</button>
+  </div>
+
+  @if (avisListe.length > 0) {
+    <div class="avis-grid">
+      @for (avis of avisListe; track avis.id) {
+        <div class="avis-card">
+          <div class="avis-etoiles">
+            @for (i of [1,2,3,4,5]; track i) {
+              <i class="ti ti-star-filled" [class.etoile-vide]="i > avis.note"></i>
+            }
+          </div>
+         @if (avis.commentaire) {
+  <p class="avis-texte">"{{ avis.commentaire }}"</p>
+}
+          <p class="avis-auteur">{{ avis.nom || 'Un apprenant Box Academy' }}</p>
+        </div>
+      }
+    </div>
+  } @else {
+    <p class="section-sub">Soyez le premier à partager votre expérience !</p>
+  }
+</section>
+
+@if (showFormulaireAvis) {
+  <div class="modal-overlay" (click)="fermerFormulaireAvis()">
+    <div class="modal-avis" (click)="$event.stopPropagation()">
+      @if (avisSucces) {
+        <div class="avis-succes">
+          <i class="ti ti-circle-check"></i>
+          <h3>Merci pour votre avis !</h3>
+          <p>Il sera publié après validation par notre équipe.</p>
+          <button class="btn-fermer-succes" (click)="fermerFormulaireAvis()">Fermer</button>
+        </div>
+      } @else {
+        <h3>Partagez votre expérience</h3>
+        <p class="modal-avis-sub">Votre avis nous aide à nous améliorer.</p>
+
+        <div class="form-group">
+          <label>Votre note</label>
+          <div class="etoiles-choix">
+            @for (i of [1,2,3,4,5]; track i) {
+              <i class="ti ti-star-filled etoile-cliquable" [class.active]="i <= avisFormData.note" (click)="choisirNote(i)"></i>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Votre nom (optionnel)</label>
+          <input type="text" [(ngModel)]="avisFormData.nom" placeholder="Ex: Faïzatou O." />
+        </div>
+
+        <div class="form-group">
+          <label>Votre email (optionnel — pour vous recontacter)</label>
+          <input type="email" [(ngModel)]="avisFormData.email" placeholder="votre@email.com" />
+        </div>
+
+       <div class="form-group">
+  <label>Votre commentaire (optionnel)</label>
+  <textarea [(ngModel)]="avisFormData.commentaire" rows="4" placeholder="Partagez votre expérience..."></textarea>
+</div>
+
+        @if (avisErreur) {
+          <div class="avis-erreur-message">{{ avisErreur }}</div>
+        }
+
+        <div class="modal-avis-actions">
+          <button class="btn-annuler" (click)="fermerFormulaireAvis()">Annuler</button>
+          <button class="btn-envoyer-avis" [disabled]="avisEnvoiEnCours" (click)="envoyerAvis()">
+            @if (avisEnvoiEnCours) { Envoi... } @else { Envoyer }
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+}
+
 <!-- ============ CTA FINAL ============ -->
 <section class="cta">
   <h2>Prêt à booster votre carrière ?</h2>

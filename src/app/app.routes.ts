@@ -20,6 +20,9 @@ import { MonEspaceMembre } from './pages/mon-espace-membre/mon-espace-membre';
 import { OnboardingMembre } from './pages/onboarding-membre/onboarding-membre';
 import { CertificationsManager } from './admin/certifications-manager/certifications-manager';
 import { RecommandationsManager } from './admin/recommandations-manager/recommandations-manager';
+import { AvisManager } from './admin/avis-manager/avis-manager';
+
+
 
 
 export const routes: Routes = [
@@ -48,6 +51,8 @@ export const routes: Routes = [
       { path: 'profil', component: Profil },
       {path:'prospection',component: Prospection},
       { path: 'recommandations', component: RecommandationsManager },
+{ path: 'avis', component: AvisManager },
+
 
     ]
   },

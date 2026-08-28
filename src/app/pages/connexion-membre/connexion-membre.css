@@ -85,6 +85,31 @@ button:hover {
   filter: brightness(0.92);
 }
 
+.auth-toggle {
+  display: flex;
+  background: #F1F2F4;
+  border-radius: 50px;
+  padding: 4px;
+  margin-bottom: 20px;
+}
+
+.toggle-option {
+  flex: 1;
+  text-align: center;
+  padding: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 50px;
+  color: #6b7280;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.toggle-active {
+  background: linear-gradient(135deg, #29abe2, #185fa5);
+  color: #ffffff;
+}
+
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;

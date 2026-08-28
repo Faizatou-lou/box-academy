@@ -71,11 +71,11 @@ export class OtpVerify implements OnInit {
           this.router.navigate(['/admin/dashboard']);
         }, 1000);
       },
-      error: (err) => {
-        this.chargement = false;
-        this.erreur = 'Code incorrect ou expiré.';
-        this.otpDigits = ['', '', '', '', '', ''];
-      }
+     error: (err) => {
+  this.chargement = false;
+  this.erreur = err.error?.message || 'Code incorrect ou expiré.';
+  this.otpDigits = ['', '', '', '', '', ''];
+}
     });
   }
 

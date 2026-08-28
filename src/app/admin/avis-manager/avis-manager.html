@@ -1,0 +1,59 @@
+<div class="page-avis">
+  <h1>Gestion des avis</h1>
+  <p class="sous-titre">Validez ou rejetez les avis soumis par les visiteurs</p>
+
+  <div class="filtres">
+    <button [class.actif]="filtreStatut === 'tous'" (click)="filtreStatut = 'tous'">
+      Tous ({{ avisListe.length }})
+    </button>
+    <button [class.actif]="filtreStatut === 'en-attente'" (click)="filtreStatut = 'en-attente'">
+      En attente ({{ compterStatut('en-attente') }})
+    </button>
+    <button [class.actif]="filtreStatut === 'valide'" (click)="filtreStatut = 'valide'">
+      Validés ({{ compterStatut('valide') }})
+    </button>
+    <button [class.actif]="filtreStatut === 'rejete'" (click)="filtreStatut = 'rejete'">
+      Rejetés ({{ compterStatut('rejete') }})
+    </button>
+  </div>
+
+  <div class="avis-liste">
+    @for (avis of avisFiltres(); track avis.id) {
+      <div class="avis-carte">
+        <div class="avis-carte-header">
+          <div class="avis-etoiles">
+            @for (i of [1,2,3,4,5]; track i) {
+              <i class="ti ti-star-filled" [class.vide]="i > avis.note"></i>
+            }
+          </div>
+          <span class="badge-statut" [class]="'statut-' + avis.statut">{{ avis.statut }}</span>
+        </div>
+
+        @if (avis.commentaire) {
+          <p class="avis-commentaire">"{{ avis.commentaire }}"</p>
+        }
+
+        <div class="avis-meta">
+          <span>{{ avis.nom || 'Anonyme' }}</span>
+          @if (avis.email) {
+            <span>· {{ avis.email }}</span>
+          }
+        </div>
+
+        @if (avis.statut === 'en-attente') {
+          <div class="avis-actions">
+            <button class="btn-valider" (click)="valider(avis.id)">✓ Valider</button>
+            <button class="btn-rejeter" (click)="rejeter(avis.id)">✕ Rejeter</button>
+          </div>
+        } @else {
+          <div class="avis-actions">
+            <button class="btn-supprimer" (click)="supprimer(avis.id)">Supprimer</button>
+          </div>
+        }
+      </div>
+    }
+    @if (avisFiltres().length === 0) {
+      <p class="liste-vide">Aucun avis dans cette catégorie.</p>
+    }
+  </div>
+</div>

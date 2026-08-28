@@ -22,9 +22,10 @@
     <i class="ti ti-brand-linkedin" aria-hidden="true"></i>LinkedIn
   </a>
 </li>
-<li><a routerLink="/connexion" routerLinkActive="active" class="navbar-connexion">Se connecter</a></li>
 </ul>
- <a routerLink="/creer-compte" class="navbar-cta">S'inscrire</a>
+ <a routerLink="/connexion" class="navbar-user-icon" aria-label="Connexion / Inscription">
+   <i class="ti ti-user" aria-hidden="true"></i>
+ </a>
 
  <div class="navbar-menu-icon" (click)="toggleMenu()">
     <span></span>
@@ -42,8 +43,8 @@
 </li>
    <!-- <li><a routerLink="/about-us" (click)="toggleMenu()">À propos De Nous</a></li>-->
     <li><a routerLink="/contact" (click)="toggleMenu()">Contact</a></li>
-    <li><a routerLink="/connexion" (click)="toggleMenu()">Se connecter</a></li>
-    <li><a routerLink="/creer-compte" (click)="toggleMenu()">S'inscrire</a></li>
+    <li><a routerLink="/connexion" (click)="toggleMenu()">Mon compte</a></li>
+   
   </ul>
 
 </nav>
