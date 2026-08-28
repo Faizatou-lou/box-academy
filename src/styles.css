@@ -4,3 +4,12 @@
   --primary-color-dark: #12294f;
   --primary-color-light: #eef4ff;
 }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  color-scheme: light;
+  background-color: #ffffff;
+}
