@@ -240,14 +240,24 @@
 @media (max-width: 768px) {
 
   .app-navbar{
-    grid-template-columns:1fr auto ;
-    column-gap: 10px;
+    grid-template-columns: 1fr auto auto;
+    column-gap: 14px;
+    padding: 0 1rem;
   }
    .navbar-links,
   .navbar-cta {
     display: none;
   }
 
+  .navbar-logo {
+    height: 56px;
+  }
+
+  .navbar-user-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 26px;
+  }
 
   .navbar-menu-icon {
     display: flex;
@@ -256,7 +266,8 @@
 
   }
 
-
-
+  .navbar-links-mobile {
+    top: 100%;
+  }
 
 }

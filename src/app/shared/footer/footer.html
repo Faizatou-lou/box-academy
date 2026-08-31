@@ -1,62 +1,66 @@
-<footer class="app-footer">
-  <div class="footer-container">
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-col">
+      <h4>Notre adresse</h4>
+      <p>Ouagadougou</p>
+      <p>Burkina Faso</p>
+    </div>
 
-    <div class="footer-brand">
-      <div class="footer-brand-top">
-      <img src="assets/logo-box.png" alt="Formation Academy" class="footer-logo" />
-      <span class="footer-title"></span>
-      </div>
-      <p class="footer-desc">
-        Centre de formation innovant, engagé à offrir des formations de qualité pour booster votre carrière.
-      </p>
-<div class="footer-socials">
-    
-        <a href="#" class="social-btn" aria-label="WhatsApp">
-          <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
-        </a>
-        <a href="#" class="social-btn" aria-label="LinkedIn">
+    <div class="footer-col">
+      <h4>Nos contacts</h4>
+      <p><i class="ti ti-phone" aria-hidden="true"></i> +226 25 33 35 30</p>
+      <p><i class="ti ti-mail" aria-hidden="true"></i> contact&#64;formationacademy.bf</p>
+      <p><i class="ti ti-clock" aria-hidden="true"></i> Lun–Ven 08h00–17h30</p>
+      <a class="btn-contact" routerLink="/contact">Nous contacter ↗</a>
+      <a class="btn-whatsapp" href="https://wa.me/22625333530" target="_blank">
+        <i class="ti ti-brand-whatsapp" aria-hidden="true"></i> WhatsApp
+      </a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Nos formations</h4>
+      <a routerLink="/formations" [queryParams]="{categorie: 'reseaux-securite'}">Réseaux & Sécurité</a>
+      <a routerLink="/formations" [queryParams]="{categorie: 'data-analyse'}">Data & Analyse</a>
+      <a routerLink="/formations" [queryParams]="{categorie: 'cybersecurite'}">Cybersécurité</a>
+      <a routerLink="/formations" [queryParams]="{categorie: 'gestion-projet'}">Gestion de projet</a>
+      <a routerLink="/formations" [queryParams]="{categorie: 'cloud-computing'}">Cloud Computing</a>
+      <a routerLink="/formations" [queryParams]="{categorie: 'bureautique'}">Bureautique</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Découvrir</h4>
+      <a routerLink="/">Accueil</a>
+      <a routerLink="/formations">Formations</a>
+      <a routerLink="/contact">Contact</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Suivez-nous</h4>
+      <div class="social-links">
+        <a href="https://linkedin.com/company/box-academy" target="_blank" aria-label="LinkedIn">
           <i class="ti ti-brand-linkedin" aria-hidden="true"></i>
         </a>
       </div>
-
     </div>
-
-    <div class="footer-links">
-      <h4>Navigation</h4>
-      <ul>
-        <li><a routerLink="/">Accueil</a></li>
-        <li><a routerLink="/formations">Formations</a></li>
-        <li><a routerLink="/contact">Contact</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-contact">
-     <h4>Contact</h4>
-      <div class="contact-item">
-        <div class="contact-icon-box">
-          <i class="ti ti-map-pin" aria-hidden="true"></i>
-        </div>
-        <span>Ouagadougou, Burkina Faso</span>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon-box">
-          <i class="ti ti-phone" aria-hidden="true"></i>
-        </div>
-        <span>+226 25 33 35 30 </span>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon-box">
-          <i class="ti ti-mail" aria-hidden="true"></i>
-        </div>
-        <span>contact&#64;formationacademy.bf</span>
-      </div>
-    </div>
-    </div>
-  
-  <div class="footer-bottom">
-   <p>© 2026 Box Academy — Tous droits réservés</p>
-   
   </div>
 
-</footer>
+  <div class="footer-hours">
+    <span class="hour-pill"><strong>Lun</strong> 08:00–17:30</span>
+    <span class="hour-pill"><strong>Mar</strong> 08:00–17:30</span>
+    <span class="hour-pill"><strong>Mer</strong> 08:00–17:30</span>
+    <span class="hour-pill"><strong>Jeu</strong> 08:00–17:30</span>
+    <span class="hour-pill"><strong>Ven</strong> 08:00–17:30</span>
+  </div>
 
+  <div class="footer-reach">
+    <p>
+      Basé à Ouagadougou, <strong>Box Academy</strong> forme au-delà du Burkina Faso —
+      notamment au Maroc et dans le reste de l'Afrique de l'Ouest.
+      <a routerLink="/contact">Une formation dans votre pays ? Contactez-nous →</a>
+    </p>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© {{ anneeCourante }} Box Academy — Tous droits réservés</p>
+  </div>
+</footer>

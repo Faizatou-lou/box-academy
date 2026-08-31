@@ -36,26 +36,6 @@
   </div>
 </section>
 
-<!-- ============ STATS ============ -->
-<section class="stats" id="stats-section">
-  <div class="stat-card">
-    <span class="stat-number">+{{ statFormations }}</span>
-    <span class="stat-label">Formations disponibles</span>
-  </div>
-  <div class="stat-card">
-    <span class="stat-number">+{{ statApprenants }}</span>
-    <span class="stat-label">Apprenants formés</span>
-  </div>
-  <div class="stat-card">
-    <span class="stat-number">+{{ statExperience }}</span>
-    <span class="stat-label">Années d'expérience</span>
-  </div>
-  <div class="stat-card">
-    <span class="stat-number">{{ statSatisfaction }}%</span>
-    <span class="stat-label">Taux de satisfaction</span>
-  </div>
-</section>
-
 <!-- ============ PROCHAINEMENT ============ -->
 @if (formationsAVenir.length > 0) {
   <section class="annonces-section" (mouseenter)="pauseDefilement()" (mouseleave)="reprendreDefilement()">
@@ -148,72 +128,6 @@
           }
         </div>
       }
-    </div>
-  </div>
-</section>
-
-<!-- ============ PARTENAIRES ============ -->
-<section class="partenaires-section">
-  <span class="section-eyebrow">Réseau</span>
-  <h2 class="section-title">Ils nous font confiance</h2>
-  <p class="section-sub">{{ partenairesTous.length }} partenaires accompagnent nos apprenants vers l'emploi</p>
-
-  <div class="partners-banners">
-    <div class="banner b-blue">
-      <h3>Box Academy Pro</h3>
-      <p>Certifications reconnues par nos partenaires entreprises</p>
-      <a routerLink="/formations">Découvrir →</a>
-    </div>
-    <div class="banner b-black">
-      <h3>Formations en entreprise</h3>
-      <p>Des programmes sur mesure pour vos équipes</p>
-      <a routerLink="/contact">Nous contacter →</a>
-    </div>
-  </div>
-
-  <div class="logos-marquee">
-    <div class="marquee-row">
-      <div class="marquee-track">
-        @for (p of partenairesLigne1; track $index) {
-          <div class="logo-chip">
-            <img [src]="'assets/partenaires/' + p.fichier" [alt]="p.nom" />
-          </div>
-        }
-        @for (p of partenairesLigne1; track $index) {
-          <div class="logo-chip" aria-hidden="true">
-            <img [src]="'assets/partenaires/' + p.fichier" alt="" />
-          </div>
-        }
-      </div>
-    </div>
-    <div class="marquee-row">
-      <div class="marquee-track reverse">
-        @for (p of partenairesLigne2; track $index) {
-          <div class="logo-chip">
-            <img [src]="'assets/partenaires/' + p.fichier" [alt]="p.nom" />
-          </div>
-        }
-        @for (p of partenairesLigne2; track $index) {
-          <div class="logo-chip" aria-hidden="true">
-            <img [src]="'assets/partenaires/' + p.fichier" alt="" />
-          </div>
-        }
-      </div>
-    </div>
-  </div>
-
-  <div class="partenaires-stats">
-    <div class="p-stat">
-      <span class="p-stat-value">{{ partenairesTous.length }}</span>
-      <span class="p-stat-label">Partenaires actifs</span>
-    </div>
-    <div class="p-stat">
-      <span class="p-stat-value">8</span>
-      <span class="p-stat-label">Secteurs représentés</span>
-    </div>
-    <div class="p-stat">
-      <span class="p-stat-value">100%</span>
-      <span class="p-stat-label">Certifications reconnues</span>
     </div>
   </div>
 </section>

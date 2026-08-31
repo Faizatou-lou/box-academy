@@ -59,75 +59,6 @@ export class AccueilComponent implements OnInit, OnDestroy, AfterViewInit {
   // ===== CATEGORIES (chargées via CategorieService, comme dans Formations) =====
   categories: Categorie[] = [];
 
-  // ===== PARTENAIRES (vrais partenaires Box Academy, répartis en 2 rangées pour le défilement) =====
-  partenairesTous = [
-    { nom: 'CAMEG', fichier: 'cameg.png' },
-    { nom: 'ONEA', fichier: 'onea.png' },
-    { nom: 'SONABEL', fichier: 'sonabel.png' },
-    { nom: 'SOFITEX', fichier: 'sofitex.png' },
-    { nom: 'CRRAE-UMOA', fichier: 'crrae.png' },
-    { nom: 'PETROCI', fichier: 'petroci.png' },
-    { nom: 'OMA', fichier: 'oma.png' },
-    { nom: 'SOCIETE GENERALE', fichier: 'societe-generale.png' },
-    { nom: 'BDM SA', fichier: 'bdm-sa.png' },
-    { nom: 'BDU-CI', fichier: 'bdu-ci.png' },
-    { nom: 'BDU-BF', fichier: 'bdu-bf.png' },
-    { nom: 'BRIDGE BANK GROUP', fichier: 'bridge-bank.png' },
-    { nom: 'NSIA', fichier: 'nsia.png' },
-    { nom: 'ECOBANK', fichier: 'ecobank.png' },
-    { nom: 'BPBF', fichier: 'bpbf.png' },
-    { nom: 'AFTRANS', fichier: 'aftrans.png' },
-    { nom: 'BMS-CI', fichier: 'bms-ci.png' },
-    { nom: 'FINACOM', fichier: 'finacom.png' },
-    { nom: 'GLOBUS-RE', fichier: 'globus.png' },
-    { nom: 'SUNU', fichier: 'sunu.png' },
-    { nom: 'SANLAM', fichier: 'salam.png' },
-    { nom: 'CORIS INVEST GROUP', fichier: 'coris-invest.png' },
-    { nom: 'CORIS HOLDING', fichier: 'coris-holding.png' },
-    { nom: 'ACEP', fichier: 'acep.png' },
-    { nom: 'BHN', fichier: 'bn.png' },
-    { nom: 'BNI', fichier: 'bni.png' },
-    { nom: 'IB BANK', fichier: 'ibbank.png' },
-    { nom: 'BADF', fichier: 'badf.png' },
-    { nom: 'CAIDP', fichier: 'caidp.png' },
-    { nom: 'NOUVELLE FSPCI', fichier: 'psp-ci.png' },
-    { nom: 'CIMAF', fichier: 'cimaf.png' },
-    { nom: 'ANEC', fichier: 'anec.png' },
-    { nom: 'FIDRA', fichier: 'fidra.png' },
-    { nom: 'SNEDAI', fichier: 'snedai.png' },
-    { nom: 'ENVOL TECHNOLOGIES', fichier: 'envol.png' },
-    { nom: 'SODIBO', fichier: 'sodibo.png' },
-    { nom: 'ORANGE', fichier: 'orange.png' },
-    { nom: 'MOOV AFRICA', fichier: 'moov.png' }
-  ];
-
-  afficherTousPartenaires = false;
-  private readonly NB_PARTENAIRES_APERCU = 11;
-
-  get partenairesLigne1() {
-    const milieu = Math.ceil(this.partenairesTous.length / 2);
-    return this.partenairesTous.slice(0, milieu);
-  }
-
-  get partenairesLigne2() {
-    const milieu = Math.ceil(this.partenairesTous.length / 2);
-    return this.partenairesTous.slice(milieu);
-  }
-
-  get partenairesAffiches() {
-    return this.afficherTousPartenaires
-      ? this.partenairesTous
-      : this.partenairesTous.slice(0, this.NB_PARTENAIRES_APERCU);
-  }
-
-  get nbPartenairesRestants(): number {
-    return this.partenairesTous.length - this.NB_PARTENAIRES_APERCU;
-  }
-
-  toggleTousPartenaires(): void {
-    this.afficherTousPartenaires = !this.afficherTousPartenaires;
-  }
-
   // Stats
   statFormations = 0;
   statApprenants = 0;
@@ -156,6 +87,12 @@ avisFormData = {
   private readonly TAB_TOP_MARGIN = 140;
   private readonly TAB_BOTTOM_MARGIN = 180;
   private scrollTicking = false;
+
+  // Sur mobile, la navbar + le titre du hero occupent plus de hauteur relative :
+  // on pousse le point de départ de l'onglet plus bas pour ne pas les chevaucher.
+  private get tabTopMargin(): number {
+    return window.innerWidth <= 768 ? 230 : this.TAB_TOP_MARGIN;
+  }
 
  constructor(
   private formationService: FormationService,
@@ -198,6 +135,7 @@ avisFormData = {
     });
 
     this.demarrerHeroAuto();
+    this.updateTabPosition();
   }
 
   ngOnDestroy(): void {
@@ -290,7 +228,9 @@ avisFormData = {
   }
 
   private observerStats(): void {
-    const section = document.querySelector('#stats-section');
+    // Déclenche le compteur animé dès que la carte "+50 formations" entre dans le viewport
+    // (remplace l'ancienne bande de stats du hero, supprimée).
+    const section = document.querySelector('.formations-highlight');
     if (!section) return;
 
     const observer = new IntersectionObserver((entries) => {
@@ -395,10 +335,16 @@ avisFormData = {
   }
 
   private updateTabPosition(): void {
+    const margin = this.tabTopMargin;
     const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
     const progress = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
-    const trackHeight = window.innerHeight - this.TAB_TOP_MARGIN - this.TAB_BOTTOM_MARGIN;
-    this.tabTop = this.TAB_TOP_MARGIN + progress * trackHeight;
+    const trackHeight = window.innerHeight - margin - this.TAB_BOTTOM_MARGIN;
+    this.tabTop = margin + progress * trackHeight;
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    this.updateTabPosition();
   }
 
   onTabClick(): void {

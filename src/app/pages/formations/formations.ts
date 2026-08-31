@@ -31,6 +31,7 @@ export class Formations implements OnInit {
 
   // 'toutes' | 'non-classees' | number (id de catégorie)
   activeCategory: string | number = 'toutes';
+  private categorieSlugActif: string | null = null;
 
   constructor(
     private formationService: FormationService,
@@ -44,6 +45,7 @@ export class Formations implements OnInit {
     this.categorieService.getCategories().subscribe({
       next: (data) => {
         this.categories = data;
+        this.appliquerCategorieActive();
         this.cdr.detectChanges();
       },
       error: (error) => {
@@ -51,31 +53,39 @@ export class Formations implements OnInit {
       }
     });
 
-    // Si on arrive depuis l'accueil avec ?categorie=slug
-    const slug = this.route.snapshot.queryParams['categorie'];
-
     this.formationService.getFormations().subscribe({
       next: (data) => {
         this.formations = data;
         this.formationsFiltrees = data;
-
-        if (slug) {
-          // on retrouve la catégorie correspondant au slug une fois les catégories chargées
-          this.categorieService.getCategories().subscribe(cats => {
-            const cat = cats.find(c => c.slug === slug);
-            if (cat) {
-              this.activeCategory = cat.id;
-            }
-            this.cdr.detectChanges();
-          });
-        }
-
         this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Erreur lors du chargement des formations :', error);
       }
     });
+
+    // Réagit à chaque changement de ?categorie=slug (ex: clic sur un lien du footer
+    // alors qu'on est déjà sur /formations — Angular réutilise le même composant,
+    // donc on ne peut pas se contenter d'un snapshot lu une seule fois)
+    this.route.queryParams.subscribe(params => {
+      this.categorieSlugActif = params['categorie'] ?? null;
+      this.appliquerCategorieActive();
+    });
+  }
+
+  private appliquerCategorieActive(): void {
+    if (!this.categorieSlugActif) {
+      this.activeCategory = 'toutes';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    // les catégories peuvent ne pas encore être chargées : on retentera dès qu'elles le seront
+    const cat = this.categories.find(c => c.slug === this.categorieSlugActif);
+    if (cat) {
+      this.activeCategory = cat.id;
+      this.cdr.detectChanges();
+    }
   }
 
   get nombreCertifiantes(): number {
