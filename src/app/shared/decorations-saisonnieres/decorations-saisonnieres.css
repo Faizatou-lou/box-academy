@@ -1,0 +1,285 @@
+/* Overlay saisonnier : purement décoratif, ne doit jamais intercepter de clic
+   ni gêner la lecture du contenu (bordures/coins uniquement, jamais au centre). */
+.decorations-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8000;
+  overflow: hidden;
+}
+
+.coin {
+  position: fixed;
+  font-size: 34px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+  opacity: 0.9;
+}
+
+/* Décalés sous la navbar et au-dessus des boutons flottants existants
+   (retour en haut / chat) pour ne jamais les chevaucher. */
+.coin-haut-gauche { top: 100px; left: 16px; }
+.coin-haut-droite { top: 100px; right: 16px; }
+.coin-bas-gauche { bottom: 100px; left: 16px; }
+.coin-bas-droite { bottom: 100px; right: 16px; }
+
+/* ============ NOËL — neige + sapins ============ */
+
+.neige {
+  position: absolute;
+  inset: 0;
+}
+
+.flocon {
+  position: absolute;
+  top: -8%;
+  color: #FFFFFF;
+  text-shadow: 0 0 4px rgba(11, 74, 44, 0.35);
+  animation-name: chute-flocon;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes chute-flocon {
+  from { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.9; }
+  50%  { transform: translateY(55vh) translateX(12px) rotate(180deg); }
+  to   { transform: translateY(115vh) translateX(-6px) rotate(360deg); opacity: 0.7; }
+}
+
+.sapin { animation: balancement 4s ease-in-out infinite; transform-origin: bottom center; }
+
+@keyframes balancement {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+/* Traîneau du Père Noël (rennes + cadeaux) qui traverse l'écran en bordure
+   haute (au-dessus de la navbar, jamais sur le contenu), toutes les 10
+   secondes, laissant une traîne d'étoiles scintillantes derrière lui. */
+.traineau {
+  position: fixed;
+  top: 4px;
+  left: 0;
+  width: 1px; /* les enfants se positionnent par rapport à ce point mobile */
+  height: 1px;
+}
+
+.pere-noel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 28px;
+  white-space: nowrap;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.35));
+  animation: passage-traineau 10s linear infinite;
+}
+
+.etoile-traine {
+  position: absolute;
+  top: 6px;
+  left: -6px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #FFE9A8;
+  box-shadow: 0 0 6px 2px rgba(255, 233, 168, 0.85);
+  animation:
+    passage-traineau 10s linear infinite,
+    scintillement-etoile-traine 0.7s ease-in-out infinite;
+}
+
+@keyframes passage-traineau {
+  from { transform: translateX(-12vw); }
+  to   { transform: translateX(112vw); }
+}
+
+@keyframes scintillement-etoile-traine {
+  0%, 100% { opacity: 0; transform: scale(0.4); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* ============ PÂQUES — œufs + lapins ============ */
+
+.oeuf {
+  position: fixed;
+  width: 26px;
+  height: 32px;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+  animation: rebond-doux 3.4s ease-in-out infinite;
+  cursor: pointer;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+/* Motif "peint à la main" (bande zigzag) + reflet brillant, pour un rendu
+   plus soigné que l'aplat de couleur uni. */
+.oeuf::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      -35deg,
+      rgba(255, 255, 255, 0.55) 0px, rgba(255, 255, 255, 0.55) 3px,
+      transparent 3px, transparent 9px
+    );
+  mix-blend-mode: overlay;
+}
+.oeuf::after {
+  content: '';
+  position: absolute;
+  top: 12%; left: 20%;
+  width: 40%; height: 22%;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  filter: blur(1.5px);
+}
+
+.oeuf-1 { top: 110px; left: 18px; background: linear-gradient(160deg, #FFC1D9, #FF8FB1); animation-delay: 0s; }
+.oeuf-2 { top: 220px; left: 30px; background: linear-gradient(160deg, #C9F2D8, #7BD9A0); rotate: -10deg; animation-delay: 0.6s; }
+.oeuf-3 { bottom: 160px; left: 22px; background: linear-gradient(160deg, #FFF3B0, #FFD966); rotate: 8deg; animation-delay: 1.1s; }
+.oeuf-4 { top: 130px; right: 20px; background: linear-gradient(160deg, #D6C2F5, #B79AEF); rotate: 6deg; animation-delay: 0.3s; }
+.oeuf-5 { bottom: 250px; right: 16px; background: linear-gradient(160deg, #BFE3FF, #8FC9F5); rotate: -8deg; animation-delay: 0.9s; }
+.oeuf-6 { bottom: 150px; right: 34px; background: linear-gradient(160deg, #FFD6C2, #FFAE8F); rotate: 4deg; animation-delay: 1.5s; }
+
+@keyframes rebond-doux {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Éclatement au clic : l'œuf se referme sur lui-même pendant que les morceaux
+   de chocolat s'envolent (voir .chocolats ci-dessous). */
+.oeuf.casse {
+  animation: eclatement-oeuf 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes eclatement-oeuf {
+  0%   { transform: scale(1) rotate(0deg); opacity: 1; }
+  40%  { transform: scale(1.25) rotate(8deg); opacity: 1; }
+  100% { transform: scale(0) rotate(25deg); opacity: 0; }
+}
+
+.chocolats {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.choc {
+  position: absolute;
+  top: 50%; left: 50%;
+  font-size: 15px;
+  transform: translate(-50%, -50%);
+  animation: envol-chocolat 0.9s ease-out forwards;
+}
+
+@keyframes envol-chocolat {
+  0%   { transform: translate(-50%, -50%) scale(0.5) rotate(0deg); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(300deg); opacity: 0; }
+}
+
+.lapin { animation: saut-lapin 2.6s ease-in-out infinite; }
+
+@keyframes saut-lapin {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  30% { transform: translateY(-16px) scaleY(1.05); }
+  45% { transform: translateY(0) scaleY(0.9); }
+  50% { transform: translateY(2px) scaleY(0.9); }
+  60% { transform: translateY(0) scaleY(1); }
+}
+
+/* ============ RAMADAN — lune + lanternes + étoiles ============ */
+
+.lune {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #E6C35C;
+  box-shadow: 0 0 16px rgba(230, 195, 92, 0.55);
+  -webkit-mask: radial-gradient(circle 16px at 66% 34%, transparent 99%, #000 100%);
+  mask: radial-gradient(circle 16px at 66% 34%, transparent 99%, #000 100%);
+}
+
+.lanterne {
+  position: fixed;
+  top: 45%;
+  width: 26px;
+  height: 36px;
+  background: linear-gradient(180deg, #E6C35C, #B8860B);
+  border-radius: 6px 6px 10px 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  transform-origin: top center;
+  animation: balancement-lanterne 3.6s ease-in-out infinite;
+}
+.lanterne::before {
+  content: '';
+  position: absolute;
+  top: -6px; left: 50%;
+  width: 12px; height: 6px;
+  margin-left: -6px;
+  background: #B8860B;
+  border-radius: 2px;
+}
+
+.lanterne-1 { left: 18px; animation-delay: 0s; }
+.lanterne-2 { right: 18px; top: 58%; animation-delay: 1.2s; }
+
+.lanterne-lueur {
+  position: absolute;
+  inset: 5px 6px;
+  border-radius: 4px;
+  background: #FFE9A8;
+  box-shadow: 0 0 8px 3px rgba(255, 233, 168, 0.75);
+  animation: scintillement 2.2s ease-in-out infinite;
+}
+
+@keyframes balancement-lanterne {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(6deg); }
+}
+
+.etoiles {
+  position: absolute;
+  inset: 0;
+}
+
+.etoile {
+  position: absolute;
+  color: #E6C35C;
+  font-size: 12px;
+  text-shadow: 0 0 4px rgba(230, 195, 92, 0.7);
+  animation: scintillement 2.6s ease-in-out infinite;
+}
+
+@keyframes scintillement {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+/* ============ ACCESSIBILITÉ ============ */
+@media (prefers-reduced-motion: reduce) {
+  .flocon,
+  .sapin,
+  .pere-noel,
+  .etoile-traine,
+  .oeuf,
+  .choc,
+  .lapin,
+  .lanterne,
+  .lanterne-lueur,
+  .etoile {
+    animation: none !important;
+  }
+  /* Sans la chute animée, on fige quelques flocons visibles plutôt que de les
+     laisser tous empilés hors écran à top: -8%. */
+  .flocon { top: 6%; opacity: 0.85; }
+  /* Le traîneau en mouvement continu n'a pas de sens figé au milieu de
+     l'écran : on le masque plutôt que de le laisser immobile au centre. */
+  .traineau { display: none; }
+  /* Sans l'animation d'envol, les morceaux de chocolat restent au moins
+     visibles à la position finale plutôt que figés invisibles au centre. */
+  .choc { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))); opacity: 0.9; }
+}

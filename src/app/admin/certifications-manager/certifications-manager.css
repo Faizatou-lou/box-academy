@@ -29,7 +29,7 @@
 }
 
 .btn-ajouter {
-  background: #29abe2;
+  background: var(--primary-color, #29ABE2);
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -133,9 +133,9 @@
 }
 
 .toggle-mode button.actif {
-  background: #29abe2;
+  background: var(--primary-color, #29ABE2);
   color: #fff;
-  border-color: #29abe2;
+  border-color: var(--primary-color, #29ABE2);
 }
 
 .form-group {
@@ -197,7 +197,7 @@
 }
 
 .btn-envoyer {
-  background: #29abe2;
+  background: var(--primary-color, #29ABE2);
   color: #fff;
 }
 

@@ -5,10 +5,12 @@ import { Footer } from './shared/footer/footer';
 import { Loading } from './shared/loading/loading';
 import { ChatWidgetComponent } from './chat-widget/chat-widget';
 import { ScrollTop } from './shared/scroll-top/scroll-top';
+import { DecorationsSaisonnieresComponent } from './shared/decorations-saisonnieres/decorations-saisonnieres';
+import { SaisonService } from './core/services/saison';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, Navbar, Footer, Loading,ChatWidgetComponent,ScrollTop],
+  imports: [RouterOutlet, Navbar, Footer, Loading,ChatWidgetComponent,ScrollTop,DecorationsSaisonnieresComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -20,7 +22,10 @@ export class App implements OnInit {
 
   constructor(
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    // Injecté ici pour déclencher la détection de la saison dès le démarrage
+    // de l'application (le service applique lui-même l'attribut data-saison).
+    private saisonService: SaisonService
   ) {}
 
   ngOnInit(): void {

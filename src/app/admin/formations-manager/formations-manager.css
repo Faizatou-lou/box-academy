@@ -5,7 +5,7 @@
 }
 
 .sidebar {
-  background-color: #1a3a6b;
+  background-color: var(--primary-color, #1a3a6b);
   color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -99,7 +99,7 @@
 }
 
 .btn-ajouter {
-  background-color: #1a3a6b;
+  background-color: var(--primary-color, #1a3a6b);
   color: #ffffff;
   border: none;
   padding: 10px 20px;
@@ -367,7 +367,7 @@
   width: 300px;
 }
 .search-input:focus {
-  border-color: #1a3a6b;
+  border-color: var(--primary-color, #1a3a6b);
 }
 
 .data-table {
@@ -409,7 +409,7 @@
 }
 .badge-statut.a-venir {
   background-color: #dbeafe;
-  color: #1d4ed8;
+  color: var(--primary-color, #1d4ed8);
 }
 
 .badge-statut.terminée {
@@ -427,7 +427,7 @@
 }
 .btn-edit {
   background-color: #eff6ff;
-  color: #1d4ed8;
+  color: var(--primary-color, #1d4ed8);
   border: none;
   padding: 5px 10px;
   border-radius: 6px;

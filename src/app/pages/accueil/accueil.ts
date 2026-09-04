@@ -7,6 +7,7 @@ import { Categorie } from '../../core/models/categorie.model';
 import { CategoryIcon } from '../../shared/category-icon/category-icon';
 import { AvisService, AvisData } from '../../core/services/avis';
 import { FormsModule } from '@angular/forms';
+import { SaisonService } from '../../core/services/saison';
 
 
 interface HeroSlide {
@@ -92,10 +93,34 @@ avisFormData = {
   private categorieService: CategorieService,
   private avisService: AvisService,
   private cdr: ChangeDetectorRef,
-  private ngZone: NgZone
+  private ngZone: NgZone,
+  private saisonService: SaisonService
 ) {}
 
+  // ===== BANNIÈRE DE VŒUX SAISONNIÈRE =====
+  // S'affiche à chaque arrivée sur l'accueil (ngOnInit se relance à chaque
+  // navigation vers cette page) puis se masque d'elle-même après quelques
+  // secondes ; elle réapparaît donc si on repart puis revient sur l'accueil.
+  saisonBanniereVisible = false;
+  messageSaisonBanniere = '';
+  private readonly messagesSaison: Record<string, string> = {
+    noel: '🎄 Joyeux Noël !',
+    paques: '🐣 Joyeuses Pâques !',
+    ramadan: '🌙 Joyeux Ramadan !'
+  };
+  private minuteurBanniere: any;
+
   ngOnInit(): void {
+
+    const saison = this.saisonService.saisonActive();
+    if (saison && this.messagesSaison[saison.id]) {
+      this.messageSaisonBanniere = this.messagesSaison[saison.id];
+      this.saisonBanniereVisible = true;
+      this.minuteurBanniere = setTimeout(() => {
+        this.saisonBanniereVisible = false;
+        this.cdr.detectChanges();
+      }, 4500);
+    }
 
     this.avisService.getPublies().subscribe({
   next: (data) => {
@@ -130,6 +155,7 @@ avisFormData = {
   ngOnDestroy(): void {
     if (this.autoScrollInterval) clearInterval(this.autoScrollInterval);
     if (this.heroAutoInterval) clearInterval(this.heroAutoInterval);
+    if (this.minuteurBanniere) clearTimeout(this.minuteurBanniere);
   }
 
   ngAfterViewInit(): void {

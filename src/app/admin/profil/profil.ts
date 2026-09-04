@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth';
 import { ThemeService } from '../../core/services/theme';
+import { SaisonService } from '../../core/services/saison';
+import { THEMES_SAISONNIERS } from '../../core/config/saisons.config';
 
 @Component({
   selector: 'app-profil',
@@ -35,15 +37,25 @@ export class Profil {
   couleurSelectionnee!: string;
   formeSelectionnee!: string;
 
+  themesDisponibles = THEMES_SAISONNIERS;
+  saisonForcee: string | null = null;
+
   constructor(
     private router: Router,
     private authService: AuthService,
-    public themeService:ThemeService
+    public themeService:ThemeService,
+    private saisonService: SaisonService
   ) {
 
 this.couleurSelectionnee = this.themeService.getCouleurActuelle();
 this.formeSelectionnee = this.themeService.getFormeActuelle();
+this.saisonForcee = this.saisonService.getForcageActuel();
 }
+
+  choisirSaison(id: string | null): void {
+    this.saisonForcee = id;
+    this.saisonService.forcerSaison(id);
+  }
 
 changerCouleur(couleur: string) {
   this.couleurSelectionnee = couleur;

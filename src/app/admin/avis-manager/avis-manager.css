@@ -12,7 +12,7 @@
   cursor: pointer;
   color: #6b7280;
 }
-.filtres button.actif { background: #29abe2; color: #fff; border-color: #29abe2; }
+.filtres button.actif { background: var(--primary-color, #29ABE2); color: #fff; border-color: var(--primary-color, #29ABE2); }
 
 .avis-liste { display: flex; flex-direction: column; gap: 12px; }
 

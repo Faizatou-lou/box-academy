@@ -1,0 +1,65 @@
+@if (saisonId(); as saison) {
+  <div class="decorations-overlay" aria-hidden="true">
+
+    @if (saison === 'noel') {
+      <div class="neige">
+        @for (flocon of flocons; track flocon.id) {
+          <span
+            class="flocon"
+            [style.left.%]="flocon.left"
+            [style.animation-delay.s]="flocon.delai"
+            [style.animation-duration.s]="flocon.duree"
+            [style.font-size.px]="flocon.taille">❄</span>
+        }
+      </div>
+      <span class="coin coin-haut-gauche sapin">🎄</span>
+      <span class="coin coin-haut-droite sapin">🎄</span>
+      <span class="coin coin-bas-gauche sapin">🎄</span>
+      <span class="coin coin-bas-droite sapin">🎄</span>
+      <div class="traineau">
+        @for (etoileTraine of etoilesTraineau; track $index) {
+          <span class="etoile-traine" [style.animation-delay.s]="etoileTraine"></span>
+        }
+        <span class="pere-noel">🦌🦌🎅🛷🎁</span>
+      </div>
+    }
+
+    @if (saison === 'paques') {
+      @for (id of oeufIds; track id) {
+        <span
+          [class]="'oeuf oeuf-' + id"
+          [class.casse]="oeufsCasses.has(id)"
+          (click)="casserOeuf(id)"
+          role="button"
+          tabindex="0"
+          aria-label="Œuf de Pâques">
+          @if (oeufsCasses.has(id)) {
+            <span class="chocolats">
+              @for (morceau of morceauxChocolat; track $index) {
+                <span class="choc" [style.--tx.px]="morceau.tx" [style.--ty.px]="morceau.ty">🍫</span>
+              }
+            </span>
+          }
+        </span>
+      }
+      <span class="coin coin-bas-gauche lapin">🐰</span>
+      <span class="coin coin-haut-droite lapin">🐇</span>
+    }
+
+    @if (saison === 'ramadan') {
+      <span class="coin coin-haut-droite lune"></span>
+      <span class="lanterne lanterne-1"><span class="lanterne-lueur"></span></span>
+      <span class="lanterne lanterne-2"><span class="lanterne-lueur"></span></span>
+      <div class="etoiles">
+        @for (etoile of etoiles; track etoile.id) {
+          <span
+            class="etoile"
+            [style.top.%]="etoile.top"
+            [style.left.%]="etoile.left"
+            [style.animation-delay.s]="etoile.delai">★</span>
+        }
+      </div>
+    }
+
+  </div>
+}

@@ -5,7 +5,7 @@
 }
 
 .sidebar {
-  background-color: #1a3a6b;
+  background-color: var(--primary-color, #1a3a6b);
   color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -116,14 +116,14 @@
 }
 
 .filtre-btn:hover {
-  border-color: #1a3a6b;
-  color: #1a3a6b;
+  border-color: var(--primary-color, #1a3a6b);
+  color: var(--primary-color, #1a3a6b);
 }
 
 .filtre-btn.active {
-  background-color: #1a3a6b;
+  background-color: var(--primary-color, #1a3a6b);
   color: #ffffff;
-  border-color: #1a3a6b;
+  border-color: var(--primary-color, #1a3a6b);
 }
 
 .table-card {
@@ -147,7 +147,7 @@
 }
 
 .search-input:focus {
-  border-color: #1a3a6b;
+  border-color: var(--primary-color, #1a3a6b);
 }
 
 .data-table {

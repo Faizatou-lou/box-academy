@@ -54,7 +54,7 @@
 .stat-value {
   font-size: 2.2rem;
   font-weight: 700;
-  color: #29ABE2;
+  color: var(--primary-color, #29ABE2);
 }
 
 /* Carte contenant le tableau */
@@ -134,7 +134,7 @@
 }
 
 .prospects-table a {
-  color: #29ABE2;
+  color: var(--primary-color, #29ABE2);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.9rem;
@@ -145,7 +145,7 @@
 }
 
 .prospects-table button {
-  background: #29ABE2;
+  background: var(--primary-color, #29ABE2);
   color: #fff;
   border: none;
   padding: 0.4rem 0.9rem;

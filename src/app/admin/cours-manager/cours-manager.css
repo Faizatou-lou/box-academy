@@ -89,9 +89,9 @@
 
 .formation-select-item.active {
   background-color: #eaf2fb;
-  color: #1a3a6b;
+  color: var(--primary-color, #1a3a6b);
   font-weight: 600;
-  border-left: 3px solid #1a3a6b;
+  border-left: 3px solid var(--primary-color, #1a3a6b);
 }
 
 .placeholder-card {
@@ -188,7 +188,7 @@
 }
 
 .btn-uploader {
-  background-color: #1a3a6b;
+  background-color: var(--primary-color, #1a3a6b);
   color: #ffffff;
   border: none;
   padding: 11px 22px;
@@ -419,7 +419,7 @@
 
 .badge {
   background: #eaf2fb;
-  color: #1a3a6b;
+  color: var(--primary-color, #1a3a6b);
   border-radius: 12px;
   padding: 2px 9px;
   font-size: 11px;

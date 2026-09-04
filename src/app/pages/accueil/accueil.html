@@ -1,3 +1,7 @@
+@if (saisonBanniereVisible) {
+  <div class="banniere-saison" role="status">{{ messageSaisonBanniere }}</div>
+}
+
 <!-- ============ HERO CAROUSEL ============ -->
 <section class="hero">
   <div class="hero-track" [style.transform]="'translateX(' + (-heroIndex * 100) + '%)'">

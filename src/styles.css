@@ -3,6 +3,43 @@
   --primary-color: #1a3a6b;
   --primary-color-dark: #12294f;
   --primary-color-light: #eef4ff;
+
+  /* Palette de marque du site public — source de vérité globale, reprise par
+     accueil.css, navbar.css, footer.css, etc. via var(). Surchargée par thème
+     saisonnier ci-dessous (voir SaisonService / saisons.config.ts). */
+  --black: #0D0F14;
+  --blue: #1E5FEB;
+  --blue-deep: #0B2E7A;
+  --blue-soft: #EAF1FE;
+  --white: #FFFFFF;
+  --gray: #5B6472;
+  --line: #E6E9EF;
+}
+
+/* ============ THÈMES SAISONNIERS ============
+   Surchargent uniquement les 4 tokens de couleur ci-dessus — aucune nouvelle
+   variable introduite. Activés via l'attribut data-saison posé par
+   SaisonService sur <html>. */
+
+:root[data-saison="noel"] {
+  --black: #1A0E0E;
+  --blue: #C81E3A;
+  --blue-deep: #0B4A2C;
+  --blue-soft: #FBEAEA;
+}
+
+:root[data-saison="paques"] {
+  --black: #2E2A24;
+  --blue: #FF8FB1;
+  --blue-deep: #4FAE7C;
+  --blue-soft: #FFF7E0;
+}
+
+:root[data-saison="ramadan"] {
+  --black: #10160F;
+  --blue: #C9A227;
+  --blue-deep: #123524;
+  --blue-soft: #F4ECD8;
 }
 
 html, body {
@@ -18,3 +55,15 @@ html, body {
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Sora', 'Inter', sans-serif;
 }
+
+/* ============ FORME DES PARTICULES (admin > Profil > Apparence) ============
+   Doit vivre ici (global) et non dans profil.css : l'attribut data-forme-particule
+   est posé sur <html> par ThemeService, hors du composant Profil. Avec
+   l'encapsulation de vues d'Angular, une règle "[attr] .classe" écrite dans le
+   CSS d'un composant est scopée des DEUX côtés ([attr][_ngcontent-xxx] .classe
+   [_ngcontent-xxx]) — comme <html> ne porte jamais l'attribut de scope du
+   composant, la partie [attr][_ngcontent-xxx] ne matche jamais et la règle ne
+   s'applique jamais. Une règle globale n'est, elle, pas scopée du tout. */
+[data-forme-particule="rond"] .particule { border-radius: 50%; clip-path: none; }
+[data-forme-particule="triangle"] .particule { border-radius: 0; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+[data-forme-particule="coeur"] .particule { border-radius: 0; clip-path: polygon(50% 15%, 61% 3%, 75% 3%, 88% 15%, 88% 32%, 50% 70%, 12% 32%, 12% 15%, 25% 3%, 39% 3%); }

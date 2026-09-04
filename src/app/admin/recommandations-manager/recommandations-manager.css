@@ -3,7 +3,7 @@
 .sous-titre { color: #6b7280; font-size: 13px; margin: 0 0 1.5rem; }
 
 .btn-ajouter {
-  background: #29abe2; color: #fff; border: none; padding: 10px 20px;
+  background: var(--primary-color, #29ABE2); color: #fff; border: none; padding: 10px 20px;
   border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; margin-bottom: 1.5rem;
 }
 
@@ -54,5 +54,5 @@
 .modal-actions { display: flex; gap: 10px; margin-top: 1.5rem; }
 .btn-annuler, .btn-envoyer { flex: 1; padding: 11px; border-radius: 10px; border: none; font-size: 14px; font-weight: 500; cursor: pointer; }
 .btn-annuler { background: #f3f4f6; color: #374151; }
-.btn-envoyer { background: #29abe2; color: #fff; }
+.btn-envoyer { background: var(--primary-color, #29ABE2); color: #fff; }
 .btn-envoyer:disabled { opacity: 0.6; }
