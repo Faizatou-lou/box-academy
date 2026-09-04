@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, NgZone, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormationService } from '../../core/services/formation';
@@ -10,9 +10,12 @@ import { FormsModule } from '@angular/forms';
 
 
 interface HeroSlide {
+  tag: string;
   titre: string;
   sousTitre: string;
   image: string;
+  /** Cadrage vertical de la photo (position Y du background) — chaque photo a son sujet à une hauteur différente. */
+  posY: string;
 }
 
 interface ColonneFormations {
@@ -40,19 +43,25 @@ export class AccueilComponent implements OnInit, OnDestroy, AfterViewInit {
   private heroAutoInterval: any;
   heroSlides: HeroSlide[] = [
     {
+      tag: 'Formations professionnelles',
       titre: 'Formez-vous avec les meilleurs experts',
       sousTitre: "Box Academy vous accompagne vers l'excellence grâce à des formations innovantes, certifiantes et adaptées au marché professionnel.",
-      image: 'assets/hero/hero1.jpg'
+      image: 'assets/hero/hero1.jpg',
+      posY: '20%'
     },
     {
+      tag: 'Certifications reconnues',
       titre: 'Des formations certifiantes reconnues',
       sousTitre: "Développez des compétences concrètes, validées par des certifications appréciées des recruteurs.",
-      image: 'assets/hero/hero2.jpg'
+      image: 'assets/hero/hero2.jpg',
+      posY: '42%'
     },
     {
+      tag: "Communauté d'apprenants",
       titre: 'Rejoignez une communauté de professionnels',
       sousTitre: "Apprenez aux côtés de centaines d'apprenants et bâtissez votre réseau professionnel.",
-      image: 'assets/hero/hero3.jpg'
+      image: 'assets/hero/hero3.jpg',
+      posY: '25%'
     }
   ];
 
@@ -78,22 +87,6 @@ avisFormData = {
   note: 5,
   commentaire: ''
 };
-  // ===== ONGLET / BULLE À PROPOS =====
-  tabTop = 140;
-  bubbleVisible = false;
-  isPopping = false;
-  showAboutModal = false;
-  particles: { id: number; x: number; y: number; delay: number }[] = [];
-  private readonly TAB_TOP_MARGIN = 140;
-  private readonly TAB_BOTTOM_MARGIN = 180;
-  private scrollTicking = false;
-
-  // Sur mobile, la navbar + le titre du hero occupent plus de hauteur relative :
-  // on pousse le point de départ de l'onglet plus bas pour ne pas les chevaucher.
-  private get tabTopMargin(): number {
-    return window.innerWidth <= 768 ? 230 : this.TAB_TOP_MARGIN;
-  }
-
  constructor(
   private formationService: FormationService,
   private categorieService: CategorieService,
@@ -114,11 +107,8 @@ avisFormData = {
     this.categorieService.getCategories().subscribe({
       next: (data) => {
         this.categories = data;
-        console.log('CATEGORIES REÇUES:', data);
         this.cdr.detectChanges();
         setTimeout(() => {
-          const elements = document.querySelectorAll('.cat-card');
-          console.log('ELEMENTS .cat-card TROUVÉS:', elements.length);
           this.observeElements('.cat-card', 80);
         }, 100);
       },
@@ -135,7 +125,6 @@ avisFormData = {
     });
 
     this.demarrerHeroAuto();
-    this.updateTabPosition();
   }
 
   ngOnDestroy(): void {
@@ -155,6 +144,40 @@ avisFormData = {
   // ===== COMPTAGE DES FORMATIONS PAR CATEGORIE =====
   nombreFormationsCategorie(categorieId: number): number {
     return this.formations.filter(f => f.categorie?.id === categorieId).length;
+  }
+
+  // ===== IMAGE ILLUSTRATIVE PAR CATEGORIE =====
+  // Associe chaque catégorie (via son nom/slug) à une photo dans assets/categories.
+  // Basé sur des mots-clés plutôt qu'une correspondance exacte, pour rester robuste
+  // aux légères variations de nom/slug côté backend.
+  private readonly categoryImages: { keywords: string[]; file: string }[] = [
+    { keywords: ['developpement', 'web'], file: 'developpement-web.jpg' },
+    { keywords: ['reseau'], file: 'reseaux-securite.jpg' },
+    { keywords: ['intelligence', 'artificielle'], file: 'intelligence-artificielle.jpg' },
+    { keywords: ['data', 'analyse'], file: 'data-analyse.jpg' },
+    { keywords: ['cyber'], file: 'cybersecurite.jpg' },
+    { keywords: ['gestion', 'projet'], file: 'gestion-projet.jpg' },
+    { keywords: ['cloud'], file: 'cloud-computing.jpg' },
+    { keywords: ['bureautique', 'bureau'], file: 'bureautique.jpg' },
+  ];
+
+  getCategoryImage(cat: Categorie): string {
+    const cle = this.normaliser(`${cat.slug || ''} ${cat.nom || ''}`);
+    const trouve = this.categoryImages.find(entry => entry.keywords.some(mot => cle.includes(mot)));
+    return `assets/categories/${trouve ? trouve.file : 'bureautique.jpg'}`;
+  }
+
+  // Enlève les accents (é -> e, etc.) sans dépendre d'une plage unicode fragile dans une regex.
+  private normaliser(valeur: string): string {
+    return valeur
+      .toLowerCase()
+      .normalize('NFD')
+      .split('')
+      .filter(caractere => {
+        const code = caractere.charCodeAt(0);
+        return code < 0x0300 || code > 0x036f; // exclut les diacritiques combinants
+      })
+      .join('');
   }
 
   private repartirEnColonnes(formations: any[]): ColonneFormations[] {
@@ -323,56 +346,6 @@ avisFormData = {
     return (mots[0][0] + mots[1][0]).toUpperCase();
   }
 
-  // ===== ONGLET / BULLE À PROPOS =====
-  @HostListener('window:scroll')
-  onWindowScroll(): void {
-    if (this.scrollTicking) return;
-    this.scrollTicking = true;
-    requestAnimationFrame(() => {
-      this.updateTabPosition();
-      this.scrollTicking = false;
-    });
-  }
-
-  private updateTabPosition(): void {
-    const margin = this.tabTopMargin;
-    const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
-    const trackHeight = window.innerHeight - margin - this.TAB_BOTTOM_MARGIN;
-    this.tabTop = margin + progress * trackHeight;
-  }
-
-  @HostListener('window:resize')
-  onWindowResize(): void {
-    this.updateTabPosition();
-  }
-
-  onTabClick(): void {
-    this.bubbleVisible = true;
-  }
-
-  onBubbleClick(): void {
-    if (this.isPopping) return;
-    this.isPopping = true;
-    this.particles = Array.from({ length: 12 }, (_, i) => ({
-      id: i,
-      x: (Math.random() - 0.5) * 250,
-      y: (Math.random() - 0.5) * 250,
-      delay: Math.random() * 0.1
-    }));
-    setTimeout(() => {
-      this.showAboutModal = true;
-      this.cdr.detectChanges();
-    }, 420);
-  }
-
-  closeAboutModal(): void {
-    this.showAboutModal = false;
-    this.isPopping = false;
-    this.bubbleVisible = false;
-    this.particles = [];
-    this.cdr.detectChanges();
-  }
 ouvrirFormulaireAvis(): void {
   this.showFormulaireAvis = true;
   this.avisSucces = false;

@@ -2,25 +2,21 @@
 <section class="hero">
   <div class="hero-track" [style.transform]="'translateX(' + (-heroIndex * 100) + '%)'">
     @for (slide of heroSlides; track slide.titre; let i = $index) {
-      <div class="hero-slide">
+      <div class="hero-slide" [style.backgroundImage]="'url(' + slide.image + ')'" [style.backgroundPosition]="'center ' + slide.posY">
+        <div class="hero-overlay"></div>
         @if (i === heroIndex) {
           <div class="hero-content">
-            <span class="eyebrow anim-eyebrow">Box Academy</span>
+            <span class="eyebrow anim-eyebrow">{{ slide.tag }}</span>
             <h1 class="hero-title anim-title">{{ slide.titre }}</h1>
             <p class="hero-subtitle anim-subtitle">{{ slide.sousTitre }}</p>
             <div class="hero-buttons anim-buttons">
-              <a routerLink="/formations" class="btn-primary">S'inscrire gratuitement</a>
+              <a routerLink="/creer-compte" class="btn-primary">S'inscrire gratuitement</a>
               <a routerLink="/contact" class="btn-outline">Nous contacter</a>
             </div>
           </div>
         } @else {
           <div class="hero-content"></div>
         }
-        <div class="hero-visual">
-          <div class="box-b1"></div>
-          <div class="box-b2"></div>
-          <div class="box-photo" [style.backgroundImage]="'url(' + slide.image + ')'"></div>
-        </div>
       </div>
     }
   </div>
@@ -141,14 +137,16 @@
   <div class="cat-grid">
     @for (cat of categories; track cat.id) {
       <a [routerLink]="['/formations']" [queryParams]="{ categorie: cat.slug }" class="cat-card">
-        <div class="cat-icon" [style.color]="cat.couleur" [style.backgroundColor]="cat.couleur + '1A'">
-          <app-category-icon [name]="cat.icone"></app-category-icon>
+        <div class="cat-photo" [style.backgroundImage]="'url(' + getCategoryImage(cat) + ')'">
+          <div class="cat-icon" [style.color]="cat.couleur" [style.backgroundColor]="cat.couleur + '1A'">
+            <app-category-icon [name]="cat.icone"></app-category-icon>
+          </div>
         </div>
-        <div>
+        <div class="cat-info">
           <div class="cat-name">{{ cat.nom }}</div>
           <div class="cat-count">{{ nombreFormationsCategorie(cat.id) }} formation{{ nombreFormationsCategorie(cat.id) > 1 ? 's' : '' }}</div>
+          <div class="cat-arrow">Explorer <i class="ti ti-arrow-right"></i></div>
         </div>
-        <div class="cat-arrow">Explorer <i class="ti ti-arrow-right"></i></div>
       </a>
     }
     @if (categories.length === 0) {
@@ -276,70 +274,4 @@
   <a routerLink="/formations" class="btn-white">Commencer maintenant</a>
 </section>
 
-<!-- ============ ONGLET À PROPOS ============ -->
-<div
-  class="about-tab"
-  [class.hidden]="bubbleVisible"
-  [style.top.px]="tabTop"
-  (click)="onTabClick()"
-  role="button"
-  tabindex="0"
-  (keyup.enter)="onTabClick()"
-  aria-label="En savoir plus sur Box Academy">
-  À propos de nous
-</div>
-
-<div
-  class="about-bubble"
-  *ngIf="bubbleVisible && !isPopping"
-  [style.top.px]="tabTop"
-  (click)="onBubbleClick()"
-  role="button"
-  tabindex="0"
-  (keyup.enter)="onBubbleClick()"
-  aria-label="Découvrir Box Academy">
-  À propos<br>de nous
-</div>
-
-<div class="bubble-particles" *ngIf="isPopping && !showAboutModal" [style.top.px]="tabTop">
-  @for (p of particles; track p.id) {
-    <span class="particle"
-      [style.--x]="p.x + 'px'" [style.--y]="p.y + 'px'"
-      [style.animation-delay]="p.delay + 's'"></span>
-  }
-</div>
-
-<div class="about-modal-overlay" *ngIf="showAboutModal" (click)="closeAboutModal()">
-  <div class="about-modal" (click)="$event.stopPropagation()">
-    <div class="about-modal-header">
-      <button class="about-modal-close" (click)="closeAboutModal()" aria-label="Fermer">
-        <i class="ti ti-x"></i>
-      </button>
-      <div class="about-modal-icon"><i class="ti ti-sparkles"></i></div>
-      <span class="section-eyebrow">Box Academy</span>
-      <h2>Votre avenir commence ici ✨</h2>
-    </div>
-    <div class="about-modal-body">
-      <div class="about-modal-text">
-        <p>Rejoignez une communauté ambitieuse : compétences concrètes, certifications reconnues, formateurs qui croient en vous.</p>
-      </div>
-      <div class="about-modal-stats">
-        <div><strong>+{{ statFormations }}</strong><span>Formations</span></div>
-        <div><strong>+{{ statApprenants }}</strong><span>Apprenants</span></div>
-        <div><strong>{{ statSatisfaction }}%</strong><span>Satisfaction</span></div>
-      </div>
-      <a routerLink="/formations" class="about-modal-cta" (click)="closeAboutModal()">
-        Je m'inscris à une formation <i class="ti ti-arrow-right"></i>
-      </a>
-      <div class="about-modal-social">
-        <span>Suivez-nous</span>
-        <a href="https://wa.me/22657405930" target="_blank" rel="noopener" aria-label="WhatsApp">
-          <i class="ti ti-brand-whatsapp"></i>
-        </a>
-        <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <i class="ti ti-brand-linkedin"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- Le widget "À propos de nous" (onglet flottant puis modale) a été entièrement retiré. -->

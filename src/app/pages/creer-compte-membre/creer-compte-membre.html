@@ -9,6 +9,10 @@
     </div>
 
     <div class="creer-compte-card flip-top" [class.folding]="enTransition()">
+      <button type="button" class="btn-retour" (click)="retour()" aria-label="Retour">
+        <i class="ti ti-arrow-left" aria-hidden="true"></i> Retour
+      </button>
+
       <div class="auth-toggle">
   <a routerLink="/connexion" class="toggle-option">Connexion</a>
   <span class="toggle-option toggle-active">Création de compte</span>

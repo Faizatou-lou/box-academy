@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
 import { AuthMembreService } from '../../core/services/auth-membre';
 
 @Component({
@@ -25,8 +26,13 @@ export class CreerCompteMembre {
 
   constructor(
     private authMembreService: AuthMembreService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {}
+
+  retour(): void {
+    this.location.back();
+  }
 
   enTransition = signal(false);
 
@@ -48,9 +54,12 @@ creerCompte() {
     next: () => {
       this.chargement.set(false);
       this.enTransition.set(true);
+      // L'animation de bascule (flip) dure ~1.2s à elle seule ; on laisse ensuite
+      // le message "Préparation de votre espace..." visible un moment avant de
+      // rediriger, sinon la transition passe trop vite pour être vue.
       setTimeout(() => {
         this.router.navigate(['/onboarding']);
-      }, 1200);
+      }, 2400);
     },
     error: (err) => {
       this.chargement.set(false);

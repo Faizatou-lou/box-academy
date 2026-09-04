@@ -88,12 +88,6 @@ export class Formations implements OnInit {
     }
   }
 
-  get nombreCertifiantes(): number {
-    if (!this.formations.length) return 0;
-    const nombre = this.formations.filter(f => f.certifiante).length;
-    return Math.round((nombre / this.formations.length) * 100);
-  }
-
   selectionnerCategorie(categorie: string | number): void {
     this.activeCategory = categorie;
   }

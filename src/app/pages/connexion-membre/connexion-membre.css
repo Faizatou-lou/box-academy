@@ -16,6 +16,23 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
+.btn-retour {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 1.25rem;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.btn-retour:hover { color: #29abe2; }
+.btn-retour i { font-size: 15px; }
+
 .connexion-card h1 {
   font-size: 1.5rem;
   font-weight: 600;

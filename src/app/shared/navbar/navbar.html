@@ -1,8 +1,8 @@
 <div class="navbar-wrapper">
 <nav class="app-navbar">  
     <div class="navbar-brand">
-        <img src="assets/logo-box.png" alt="Box Academy" class="navbar-logo"/>
-    
+        <img src="assets/logo-icon.png" alt="" class="navbar-logo"/>
+        <span class="navbar-title">Box.academy</span>
     </div>
 
     <ul class="navbar-links">
@@ -12,8 +12,8 @@
     Formations
   </a>
 </li>
-<!--<li><a routerLink="/about-us" routerLinkActive="active">À  Propos De Nous </a></li>-->
 <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
+<li><a href="https://site-off-box-africa.vercel.app" target="_blank" rel="noopener noreferrer">Box Africa <i class="ti ti-external-link" aria-hidden="true"></i></a></li>
 <li class="navbar-socials">
   <a href="https://wa.me/22657405930" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
     <i class="ti ti-brand-whatsapp" aria-hidden="true"></i> WhatsApp
@@ -37,14 +37,14 @@
     <li><a routerLink="/" (click)="toggleMenu()">Accueil</a></li>
     <li>
   <a routerLink="/formations" (click)="toggleMenu()">
-    
+
     Formations
   </a>
 </li>
-   <!-- <li><a routerLink="/about-us" (click)="toggleMenu()">À propos De Nous</a></li>-->
     <li><a routerLink="/contact" (click)="toggleMenu()">Contact</a></li>
+    <li><a href="https://site-off-box-africa.vercel.app" target="_blank" rel="noopener noreferrer" (click)="toggleMenu()">Box Africa <i class="ti ti-external-link" aria-hidden="true"></i></a></li>
     <li><a routerLink="/connexion" (click)="toggleMenu()">Mon compte</a></li>
-   
+
   </ul>
 
 </nav>

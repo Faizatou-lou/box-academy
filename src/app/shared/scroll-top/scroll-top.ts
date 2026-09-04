@@ -1,4 +1,4 @@
-import { Component, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, HostListener, ChangeDetectorRef, Input } from '@angular/core';
 
 @Component({
   selector: 'app-scroll-top',
@@ -8,6 +8,9 @@ import { Component, HostListener, ChangeDetectorRef } from '@angular/core';
   styleUrl: './scroll-top.css'
 })
 export class ScrollTop {
+
+  /** Sur les pages où le bas-gauche est déjà occupé (ex: sidebar admin), passer "right". */
+  @Input() position: 'left' | 'right' = 'left';
 
   visible = false;
 

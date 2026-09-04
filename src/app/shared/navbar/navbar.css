@@ -15,31 +15,33 @@
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
 }
 .navbar-brand {
   display:flex;
   padding-left: 15px;
   align-items: center;
+  gap: 10px;
   justify-self: start;
   height:100%;
 }
 
 .navbar-logo {
-  height: 80px;
+  height: 42px;
   width: auto;
   object-fit: contain;
   display: block;
-
-  
 }
 
 .navbar-title {
   color: #ffffff;
-  font-size: 25px;
-  font-weight: 500;
+  font-family: 'Sora', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
   margin: 0;
   padding: 0;
   line-height: normal;
+  white-space: nowrap;
 }
 
 .navbar-links {
@@ -81,7 +83,7 @@
 
 
 .navbar-links li a:hover::after,
-.navbar-links li a.active::after{
+.navbar-links li a.active::after {
   width: 100%;
 }
 
@@ -161,7 +163,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
-   background-color: #0e7aad;
+  background-color: #0B2E7A;
   z-index: 999;
   max-height: 0;
   overflow: hidden;
@@ -250,7 +252,11 @@
   }
 
   .navbar-logo {
-    height: 56px;
+    height: 32px;
+  }
+
+  .navbar-title {
+    font-size: 15px;
   }
 
   .navbar-user-icon {

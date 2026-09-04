@@ -18,6 +18,11 @@
   transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.2s ease;
 }
 
+.btn-scroll-top.right {
+  left: auto;
+  right: 24px;
+}
+
 .btn-scroll-top:hover {
   transform: translateY(-4px) scale(1.06);
   box-shadow: 0 8px 24px rgba(24, 95, 165, 0.45);

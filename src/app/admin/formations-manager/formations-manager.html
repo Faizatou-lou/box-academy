@@ -39,6 +39,16 @@
           </select>
         </div>
 
+        <div class="form-group">
+          <label>Catégorie</label>
+          <select [(ngModel)]="formData.categorieId">
+            <option [ngValue]="null">— Aucune —</option>
+            @for (cat of categories; track cat.id) {
+              <option [ngValue]="cat.id">{{ cat.nom }}</option>
+            }
+          </select>
+        </div>
+
         <div class="form-group full-width">
           <label>Descriptif <span class="required">*</span></label>
           <textarea [(ngModel)]="formData.descriptif" rows="3" placeholder="Description de la formation"></textarea>
@@ -60,8 +70,13 @@
         </div>
 
 <div class="form-group">
-  <label>src\assets\logos</label>
-  <input type="text" [(ngModel)]="formData.icone" placeholder="Ex: angular.png" />
+  <label>Logo</label>
+  <select [(ngModel)]="formData.icone">
+    <option value="">— Aucun logo —</option>
+    @for (fichier of logosDisponibles; track fichier) {
+      <option [value]="fichier">{{ fichier }}</option>
+    }
+  </select>
 </div>
 <div class="form-group full-width">
   <label>Couleur de la bannière</label>

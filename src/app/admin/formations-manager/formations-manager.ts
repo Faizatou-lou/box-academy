@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FormationService } from '../../core/services/formation';
 import { AuthService } from '../../core/services/auth';
+import { CategorieService } from '../../core/services/categorie';
+import { Categorie } from '../../core/models/categorie.model';
 @Component({
   selector: 'app-formations-manager',
   standalone: true,
@@ -13,6 +15,7 @@ import { AuthService } from '../../core/services/auth';
 export class FormationsManager implements OnInit {
 
   formations: any[] = [];
+  categories: Categorie[] = [];
   formData = {
     titre: '',
     descriptif: '',
@@ -22,8 +25,17 @@ export class FormationsManager implements OnInit {
     dateFin: '',
     statut: 'Disponible',
     icone:'',
-    couleur:'#29ABE2'
+    couleur:'#29ABE2',
+    categorieId: null as number | null
   };
+
+  // Fichiers réellement présents dans src/assets/logos — évite de taper un nom
+  // (ou un emoji par erreur) qui ne correspond à aucun fichier existant.
+  logosDisponibles = [
+    'AI.png', 'ISO.png', 'Itil.png', 'Prince2.png', 'cisco.svg', 'default.png',
+    'fortinet.svg', 'microsoft-azure.svg', 'microsoft-office-svgrepo-com.svg',
+    'microsoft.svg', 'ms-defender.svg', 'oracle.svg', 'pmp.svg', 'power-Bi.png', 'windows.svg'
+  ];
 
   suggestionsCouleurs = [
     { nom: 'Box Academy', hex: '#29ABE2' },
@@ -48,6 +60,7 @@ export class FormationsManager implements OnInit {
     private router: Router,
     private formationService: FormationService,
     private authService: AuthService,
+    private categorieService: CategorieService,
     private cdr:ChangeDetectorRef
   ) {}
 
@@ -55,6 +68,19 @@ export class FormationsManager implements OnInit {
      console.log("=== FormationsManager créé ===", this);
 
   this.chargerFormations();
+  this.chargerCategories();
+  }
+
+  chargerCategories() {
+    this.categorieService.getCategories().subscribe({
+      next: (data) => {
+        this.categories = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error("Erreur chargement catégories :", err);
+      }
+    });
   }
 
 chargerFormations() {
@@ -84,7 +110,7 @@ ngOnDestroy() {
   ouvrirFormulaire() {
     this.showFormulaire = true;
     this.modeEdition = false;
-    this.formData = { titre: '', descriptif: '', certifiante: true, axesString: '', dateDebut: '', dateFin: '', statut: 'Disponible',icone:'' ,couleur:'#29ABE2'};
+    this.formData = { titre: '', descriptif: '', certifiante: true, axesString: '', dateDebut: '', dateFin: '', statut: 'Disponible',icone:'' ,couleur:'#29ABE2', categorieId: null};
     this.erreur = '';
   }
 
@@ -101,7 +127,8 @@ ngOnDestroy() {
       dateFin: formation.dateFin,
       statut: formation.statut,
       icone:formation.icone,
-      couleur:formation.couleur || '#29ABE2'
+      couleur:formation.couleur || '#29ABE2',
+      categorieId: formation.categorie?.id ?? null
     };
     this.erreur = '';
   }
@@ -131,7 +158,13 @@ ngOnDestroy() {
       dateFin: this.formData.dateFin,
       statut: this.formData.statut,
       icone:this.formData.icone,
-      couleur:this.formData.couleur
+      couleur:this.formData.couleur,
+      // L'API exige l'objet catégorie complet (id, nom, description, icone, couleur, slug) —
+      // un simple {id} renvoie une erreur 400. On retrouve donc l'objet complet dans la
+      // liste déjà chargée plutôt que de n'envoyer que la référence.
+      categorie: this.formData.categorieId
+        ? (this.categories.find(c => c.id === this.formData.categorieId) ?? null)
+        : null
     };
 
     if (this.modeEdition) {

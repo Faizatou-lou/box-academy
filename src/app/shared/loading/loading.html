@@ -1,42 +1,14 @@
 <div class="box-loading-overlay" [class.hidden]="!isVisible">
   <div class="box-loading-content">
 
-    <div class="box-confetti-container" #confettiContainer></div>
-
-    <svg width="400" height="300" viewBox="0 0 400 300" class="box-loading-svg">
-      <defs>
-        <clipPath id="boxCircleClip">
-          <circle cx="200" cy="120" r="65"/>
-        </clipPath>
-      </defs>
-
-      <circle cx="200" cy="120" r="67" fill="none" stroke="#29ABE2" stroke-width="1.5" class="box-ring box-ring-1"/>
-      <circle cx="200" cy="120" r="67" fill="none" stroke="#29ABE2" stroke-width="1.5" class="box-ring box-ring-2"/>
-      <circle cx="200" cy="120" r="67" fill="none" stroke="#29ABE2" stroke-width="1.5" class="box-ring box-ring-3"/>
-
-      <circle cx="200" cy="120" r="65" fill="#f0f9ff" stroke="#29ABE2" stroke-width="2"/>
-
-      <g clip-path="url(#boxCircleClip)">
-        <path fill="#29ABE2" opacity="0.45" class="box-wave box-wave-1"
-          d="M135,140 Q155,130 175,140 T215,140 T255,140 T265,140 L265,195 L135,195 Z"/>
-        <path fill="#0e7aad" opacity="0.65" class="box-wave box-wave-2"
-          d="M135,150 Q155,162 175,150 T215,150 T255,150 T265,150 L265,195 L135,195 Z"/>
-      </g>
-
-      <circle cx="200" cy="120" r="65" fill="none" stroke="#29ABE2" stroke-width="2.5"/>
-
-      <g transform="translate(200,120)">
-        <path d="M -18,-22 L 0,-32 L 18,-22 L 18,2 L 0,12 L -18,2 Z" fill="none" stroke="#0e7aad" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M -18,-22 L 0,-12 L 18,-22" fill="none" stroke="#29ABE2" stroke-width="2.5" stroke-linejoin="round"/>
-        <line x1="0" y1="-12" x2="0" y2="12" stroke="#0e7aad" stroke-width="2.5"/>
-        <line x1="-9" y1="-17" x2="-9" y2="7" stroke="#29ABE2" stroke-width="2" opacity="0.5"/>
-        <line x1="9" y1="-17" x2="9" y2="7" stroke="#0e7aad" stroke-width="2" opacity="0.5"/>
-      </g>
-    </svg>
-
-    <div class="box-loading-brand">
-      <span>{{ displayText }}</span><span class="box-cursor">|</span>
+    <div class="box-loading-badge">
+      <img src="assets/logo-icon.png" alt="" class="box-loading-icon" />
+      <svg class="box-loading-ring" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="44"/>
+      </svg>
     </div>
+
+    <div class="box-loading-brand">Box.academy</div>
 
     <div class="box-loading-status">
       <span>Chargement</span>
@@ -45,10 +17,6 @@
         <span class="box-dot box-dot-2"></span>
         <span class="box-dot box-dot-3"></span>
       </span>
-    </div>
-
-    <div class="box-progress-track">
-      <div class="box-progress-fill"></div>
     </div>
 
   </div>

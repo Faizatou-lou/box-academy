@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
 import { AuthMembreService } from '../../core/services/auth-membre';
 
 @Component({
@@ -22,8 +23,13 @@ export class ConnexionMembre {
 
   constructor(
     private authMembreService: AuthMembreService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {}
+
+  retour(): void {
+    this.location.back();
+  }
 
   connexion() {
     if (!this.formData.email || !this.formData.motDePasse) {
